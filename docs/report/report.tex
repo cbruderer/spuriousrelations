@@ -39,26 +39,32 @@
 \section{Time series analysis (Andrina)}
 ... Correlation measures, k-means clustering, binning/smoothing ...
 
-The main results of the data reduction explained in the previous section, are time-ordered datasets of the occurence of each of the 100 keywords in the queried twitter dataset. In order to identify relationships between different keywords, we compare their occurences using three different methods based on the Pearson correlation coefficient and k means clustering. 
+The main results of the data reduction explained in the previous section, are time series of the occurence of each of the 100 keywords in the queried twitter dataset. In order to identify relationships between different keywords, we compare their occurence frequencies using three different methods based on the Pearson correlation coefficient and k means clustering. 
 
-Given two time series $X_{1}$ and $X_{2}$ we can determine the amount of linear dependence with the time dependent correlation coefficient $\rho(\Delta t)$, which is defined as
+We can determine the amount of linear dependence between two time series $X_{i}$ and $X_{j}$ using the correlation coefficient $\rho$. The correlation $\rho(\Delta t)$ between two time series is a function of the time lag $\Delta t$ between the two and is defined as
 \begin{equation}
-\rho(\Delta t) = \langle X_{1, t} X_{2, t+\delta t} \rangle, \label{eq:corrcoef}
+\rho(\Delta t) = \langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle. \label{eq:corrcoef}
 \end{equation} 
-where $\Delta t$ denotes the time lag between the two time series. For $\Delta t = 0$ we recover the usual correlation coefficient, whereas for $\Delta t \neq 0$, $\rho(\Delta t)$ quantifies the amount of linear dependence between shifted time series. In order for \ref{eq:corrcoef} to be a valid correlation measure, the values of both time series at all time $t$ need to identically distributed (IID) random variables. This means that both time series $X_{1}$, $X_{2}$ need to be stationary which means that their mean, variance and covariance do not depend specifically on time
+For $\Delta t = 0$ we recover the usual correlation coefficient, whereas for $\Delta t \neq 0$, $\rho(\Delta t)$ quantifies the amount of linear dependence between shifted time series. If the two time series are equal i.e. $i = j$, then we recover the autocorrelation function of the time series, which quantifies the amount of linear dependence in the time series itself. In order to compare the correlation between different time series, it is customary to normalise Eq.~\ref{eq:corrcoef} by the variance of the two time series i.e.
+\begin{equation}
+\rho(\Delta t) = \frac{\langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{j, t}-\bar{X}_{j}) (X_{j, t}-\bar{X}_{j}) \rangle}}.
+\end{equation} 
+We can estimate the value of $\rho(\Delta t)$ from the sample covariance and variances.
+
+In order for Eq.~\ref{eq:corrcoef} to be a valid correlation measure, the values of both time series at all times $t$ need to identically distributed (IID) random variables. This means that both time series $X_{i}$, $X_{j}$ need to be stationary i.e. that their mean $\mu$, variance $\sigma^{2}$ and autocorrelation function $\rho(\Delta t)$ do not depend explicitly on time $t$
 \begin{align}
 \mu &= \langle X_{i, t} \rangle, \\
 \sigma^{2} &=  \langle (X_{i, t}-\bar{X})^{2} \rangle \\
-\rho(\Delta t) &=\langle (X_{i, t}-\bar{X}) (X_{i, t+\Delta t}-\bar{X}) \rangle. 
+\rho(\Delta t) &= \frac{\langle (X_{i, t}-\bar{X}) (X_{i, t+\Delta t}-\bar{X}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{i, t+\Delta t}-\bar{X}_{j}) (X_{i, t+\Delta t}-\bar{X}_{}) \rangle}}. 
 \end{align} 
 We do not expect the occurences of keywords in twitter data to be stationary time series, since the mean occurence of any keyword will for example depend on world events, its popularity and also on the number of people using twitter. We can assess if any time series is stationary by evaluating its autocorrelation function $\rho(\Delta t)$. For an IID time series, $\rho(\Delta t)$ will be close to zero whereas non stationary time series are characterised by slowly decaying autocorrelation functions.
-In order to be able to quantify the correlation between non stationary time series we need to make the series stationary prior to evaluating \ref{eq:corrcoef}. This process is called pre-whitening. The most basic form of prewhitening of the differencing method, which allows to transform time series with a slow trend to stationary series. A time series with a trend can be written as
+In order to be able to quantify the correlation between non stationary time series we need to make the series stationary prior to evaluating Eq.~\ref{eq:corrcoef}. This process is called pre-whitening. The most basic form of prewhitening of the differencing method, which allows to transform time series with a slow trend to stationary series. A time series with a trend can be written as
 \begin{equation}
-X_{1, t} = T_{i, t} + R_{i, t},
+X_{i, t} = T_{i, t} + R_{i, t},
 \end{equation} 
-where $T_{i, t}$ denotes the time series' trend and $R_{i, t}$ are random fluctuations around this trend. If the time series varies slowly, we can remove the trend by considering the differences time series instead of the initial one. The differenced time series is defined as
+where $T_{i, t}$ denotes the time series' trend and $R_{i, t}$ are random fluctuations around this trend. If the time series varies slowly, we can remove the trend by considering the differenced time series instead of the initial one. The differenced time series is defined as
 \begin{equation}
-D_{1, t} = X_{1, t+1}- X_{1, t}.
+D_{i, t} = X_{1, t+1}- X_{1, t}.
 \end{equation} 
 If $T_{i, t}$ is slowly varying, this transformed time series will only capture the random variations around the global trend. The cross correlation between two differenced time series thus encodes the amount of linear dependence between changes in one time series from its global trend and changes in the second.
 
