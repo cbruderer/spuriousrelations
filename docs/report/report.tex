@@ -3,6 +3,7 @@
 \usepackage[margin=1.0in]{geometry}
 
 \usepackage{lipsum}% Just for this example
+\usepackage{url}
 \usepackage{amsmath}
 \setlength{\parindent}{0pt}% No paragraph indent
 \pagestyle{empty}% No page headers/footers
@@ -41,11 +42,11 @@
 
 The main results of the data reduction explained in the previous section, are time series of the occurence of each of the 100 keywords in the queried twitter dataset. In order to identify relationships between different keywords, we compare their occurence frequencies using three different methods based on the Pearson correlation coefficient and k means clustering. 
 
-We can determine the amount of linear dependence between two time series $X_{i}$ and $X_{j}$ using the correlation coefficient $\rho$. The correlation $\rho(\Delta t)$ between two time series is a function of the time lag $\Delta t$ between the two and is defined as
+We can determine the amount of linear dependence between two time series $X_{i}$ and $X_{j}$ using the correlation coefficient $\rho$. The correlation $\rho(\Delta t)$ between two time series is a function of the time lag $\Delta t$ between the two and is defined as \cite{dettling14}
 \begin{equation}
 \rho(\Delta t) = \langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle. \label{eq:corrcoef}
 \end{equation} 
-For $\Delta t = 0$ we recover the usual correlation coefficient, whereas for $\Delta t \neq 0$, $\rho(\Delta t)$ quantifies the amount of linear dependence between shifted time series. If the two time series are equal i.e. $i = j$, then we recover the autocorrelation function of the time series, which quantifies the amount of linear dependence in the time series itself. In order to compare the correlation between different time series, it is customary to normalise Eq.~\ref{eq:corrcoef} by the variance of the two time series i.e.
+For $\Delta t = 0$ we recover the usual correlation coefficient, whereas for $\Delta t \neq 0$, $\rho(\Delta t)$ quantifies the amount of linear dependence between shifted time series. If the two time series are equal i.e. $i = j$, then we recover the autocorrelation function of the time series, which quantifies the amount of linear dependence in the time series itself. In order to compare the correlation between different time series, it is customary to normalise Eq.~\ref{eq:corrcoef} by the variance of the two time series i.e. \cite{dettling14}
 \begin{equation}
 \rho(\Delta t) = \frac{\langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{j, t}-\bar{X}_{j}) (X_{j, t}-\bar{X}_{j}) \rangle}}.
 \end{equation} 
@@ -58,11 +59,11 @@ In order for Eq.~\ref{eq:corrcoef} to be a valid correlation measure, the values
 \rho(\Delta t) &= \frac{\langle (X_{i, t}-\bar{X}) (X_{i, t+\Delta t}-\bar{X}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{i, t+\Delta t}-\bar{X}_{j}) (X_{i, t+\Delta t}-\bar{X}_{}) \rangle}}. 
 \end{align} 
 We do not expect the occurences of keywords in twitter data to be stationary time series, since the mean occurence of any keyword will for example depend on world events, its popularity and also on the number of people using twitter. We can assess if any time series is stationary by evaluating its autocorrelation function $\rho(\Delta t)$. For an IID time series, $\rho(\Delta t)$ will be close to zero whereas non stationary time series are characterised by slowly decaying autocorrelation functions.
-In order to be able to quantify the correlation between non stationary time series we need to make the series stationary prior to evaluating Eq.~\ref{eq:corrcoef}. This process is called pre-whitening. The most basic form of prewhitening of the differencing method, which allows to transform time series with a slow trend to stationary series. A time series with a trend can be written as
+In order to be able to quantify the correlation between non stationary time series we need to make the series stationary prior to evaluating Eq.~\ref{eq:corrcoef}. This process is called pre-whitening. The most basic form of prewhitening of the differencing method, which allows to transform time series with a slow trend to stationary series. A time series with a trend can be written as \cite{dettling14}
 \begin{equation}
 X_{i, t} = T_{i, t} + R_{i, t},
 \end{equation} 
-where $T_{i, t}$ denotes the time series' trend and $R_{i, t}$ are random fluctuations around this trend. If the time series varies slowly, we can remove the trend by considering the differenced time series instead of the initial one. The differenced time series is defined as
+where $T_{i, t}$ denotes the time series' trend and $R_{i, t}$ are random fluctuations around this trend. If the time series varies slowly, we can remove the trend by considering the differenced time series instead of the initial one. The differenced time series is defined as \cite{dettling14}
 \begin{equation}
 D_{i, t} = X_{i, t+1}- X_{i, t}.
 \end{equation} 
@@ -81,5 +82,12 @@ In order to find relationships between the keywords we will proceed in two steps
 \section{Acknowledgements}
 ...
 
+\begin{thebibliography}{9}
+
+\bibitem{dettling14}
+Marcel Dettling, Applied Time Series Analysis, SS 2014, Zurich University of Applied Sciences, 
+\url{https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf}
+
+\end{thebibliography}
 
 \end{document}
