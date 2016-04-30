@@ -62,20 +62,24 @@ The main results of the data reduction explained in the previous section, are ti
 
 We can determine the amount of linear dependence between two time series $X_{i}$ and $X_{j}$ using the correlation coefficient $\rho$. The correlation $\rho(\Delta t)$ between two time series is a function of the time lag $\Delta t$ between the two and is defined as \cite{dettling14}
 \begin{equation}
-\rho(\Delta t) = \langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle, \label{eq:corrcoef}
+\rho_{ij}(\Delta t) = \langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle, \label{eq:corrcoef}
 \end{equation} 
-where $\langle ... \rangle$ denotes the ensemble average. For $\Delta t = 0$ we recover the usual correlation coefficient, whereas for $\Delta t \neq 0$, $\rho(\Delta t)$ quantifies the amount of linear dependence between shifted time series. If the two time series are equal i.e. $i = j$, then we recover the autocorrelation function of the time series, which quantifies the amount of linear dependence in the time series itself. In order to compare the correlation between different time series, it is customary to normalise Eq.~\ref{eq:corrcoef} by the variance of the two time series i.e. \cite{dettling14}
+where $\langle ... \rangle$ denotes the ensemble average. For $\Delta t = 0$ we recover the usual correlation coefficient, whereas for $\Delta t \neq 0$, $\rho_{ij}(\Delta t)$ quantifies the amount of linear dependence between shifted time series. If the two time series are equal i.e. $i = j$, then we recover the autocorrelation function of the time series, which quantifies the amount of linear dependence in the time series itself. In order to compare the correlation between different time series, it is customary to normalise Eq.~\ref{eq:corrcoef} by the variance of the two time series i.e. \cite{dettling14}
 \begin{equation}
-\rho(\Delta t) = \frac{\langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{j, t}-\bar{X}_{j}) (X_{j, t}-\bar{X}_{j}) \rangle}}. \label{eq:corrcoef1}
+\rho_{ij}(\Delta t) = \frac{\langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{j, t}-\bar{X}_{j}) (X_{j, t}-\bar{X}_{j}) \rangle}}. \label{eq:corrcoef1}
 \end{equation} 
 
-When performing time series analyses we generally do not have access to the ensemble averages of the series, but we need to estimate the auto and cross correlations from the samples we have at hand. In order to be able to estimate the auto- or cross correlation using Eq.~\ref{eq:corrcoef}, the ensemble average needs to equal the sample mean i.e. the values of both time series at all times $t$ need to identically distributed random variables. This is equivalent to requiring both time series $X_{i}$, $X_{j}$ to be stationary, which means that their mean $\mu$, variance $\sigma^{2}$ and autocorrelation function $\rho(\Delta t)$ do not depend explicitly on time $t$
+When performing time series analyses we generally do not have access to the ensemble averages of the series, but we need to estimate the auto and cross correlations from the samples we have at hand. In order to be able to estimate the auto- or cross correlation using Eq.~\ref{eq:corrcoef}, the ensemble average needs to equal the sample mean i.e. the values of both time series at all times $t$ need to identically distributed random variables. This is equivalent to requiring both time series $X_{i}$, $X_{j}$ to be stationary, which means that their mean $\mu$, variance $\sigma^{2}$ and autocorrelation function $\rho_{ii}(\Delta t)$ do not depend explicitly on time $t$
 \begin{align}
 \mu &= \langle X_{i, t} \rangle, \\
 \sigma^{2} &=  \langle (X_{i, t}-\bar{X})^{2} \rangle \\
-\rho(\Delta t) &= \frac{\langle (X_{i, t}-\bar{X}) (X_{i, t+\Delta t}-\bar{X}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{i, t+\Delta t}-\bar{X}_{j}) (X_{i, t+\Delta t}-\bar{X}_{}) \rangle}}. 
+\rho_{ii}(\Delta t) &= \frac{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t+\Delta t}-\bar{X}_{i}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{i, t+\Delta t}-\bar{X}_{i}) (X_{i, t+\Delta t}-\bar{X}_{i}) \rangle}}. 
 \end{align} 
-Only in this case, can we replace the ensemble averages in Equations \ref{eq:corrcoef} and \ref{eq:corrcoef1} with the sample means.
+Only in this case, can we replace the ensemble averages in Equations \ref{eq:corrcoef} and \ref{eq:corrcoef1} with the sample means. This leads to the following estimators for the auto and cross correlation functions \cite{dettling14}:
+\begin{align}
+\rho_{ii}(\Delta t) &= \frac{\sum_{t=1}^{n-\Delta t} (X_{i, t}-\bar{X}_{i}) (X_{i, t+\Delta t}-\bar{X}_{i})}{\sum_{t=1}^{n} (X_{i, t}-\bar{X}_{i})^{2}} \\
+\rho_{ij}(\Delta t) &= \frac{\sum_{t=1}^{n-\Delta t} (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j})}{\sqrt{\sum_{t=1}^{n} (X_{i, t}-\bar{X}_{i})^{2}\sum_{t=1}^{n} (X_{j, t}-\bar{X}_{j})^{2}}}.
+\end{align} 
 
 We do not expect the occurrences of keywords in twitter data to be stationary time series, since the mean occurrence of any keyword will for example depend on world events, its popularity and also on the number of people using twitter. We can roughly assess if any time series is stationary by visually inspecting the time series plot and also by computing its autocorrelation function $\rho(\Delta t)$. Non stationary time series are generally characterised by clear patterns in the autocorrelation functions because consecutive values are strongly correlated through the common trend.
 
@@ -91,7 +95,7 @@ If $T_{i, t}$ is slowly varying, this transformed time series will only capture 
 
 For non stationary time series, we can thus first perform differencing and then compute the auto and cross correlations between the differenced time series. This will encode the amount of linear dependence between changes in one time series from its global trend and changes in the second. 
 
-In order to quantify the significance of both the auto- and cross correlations, we need to compare the measured values to the expected values for uncorrelated time series. For uncorrelated time series, which are a sequence of IID variables we expect both for the auto and cross correlations $\rho(\Delta t) = 0$ with a variance of $\sigma^{2}(\rho(\Delta t)) = \frac{1}{n}$, where $n$ denotes the number of samples used to estimate the correlation. For simplicity, we will call a cross-correlation between two time series significant if its value exceeds $\sigma^{2}(\rho(\Delta t))$, even though we do not expect the differenced time series to be perfect IID processes. 
+In order to quantify the significance of both the auto- and cross correlations, we need to compare the measured values to the expected values for uncorrelated time series. For uncorrelated time series, which are a sequence of IID variables we expect both for the auto and cross correlations $\rho(\Delta t) = 0$ with a variance of $\sigma^{2}(\rho(\Delta t)) = \frac{1}{n}$, where $n$ denotes the number of samples used to estimate the correlation \cite{dettling14}. For simplicity, we will call a cross-correlation between two time series significant if its value exceeds $\sigma^{2}(\rho(\Delta t))$, even though we do not expect the differenced time series to be perfect IID processes. 
 
 In order to find relationships between the keywords we will proceed in two steps: for illustration purposes we will compute the cross correlation between all the time series regardless of stationarity. We will then compute the autocorrelation function of all the series and recompute the correlation coefficient using the differenced time series for non stationary processes and compare theses two measures.
 
