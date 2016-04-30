@@ -70,7 +70,7 @@ def freq_plot(freq_array, date_array, plot_name,
     # set up plot
     plot = Figure(plot_width=1000, tools="pan,reset,"
                                          "resize,save,wheel_zoom",
-                  )
+                  responsive=True)
     plot.min_border=0
     colormap = Spectral3
 
@@ -99,16 +99,16 @@ def freq_plot(freq_array, date_array, plot_name,
     first_key1 = str(key2index(init_key1)) + ': ' + init_key1
     first_key2 = str(key2index(init_key2)) + ': ' + init_key2
 
-    key1_select = Select(value=first_key1, title='key1',
+    key1_select = Select(value=first_key1, title='keyword 1',
                          options=options,
                          callback=callback1)
-    key2_select = Select(value=first_key2, title='key2',
+    key2_select = Select(value=first_key2, title='keyword 2',
                          options=options,
                          callback=callback2)
 
-    inputs = VBox(key1_select, key2_select)
+    inputs = HBox(key1_select, key2_select, width=400)
 
-    layout = HBox(inputs, plot)
+    layout = VBox(inputs, plot)
     # layout = vform(inputs, plot)
 
     # for website
