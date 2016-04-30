@@ -11,24 +11,42 @@
 \renewcommand{\baselinestretch}{1.3}
 \setlength{\parskip}{1em}
 
-\begin{document}
+\author{
+	Claudio Bruderer\\
+	\texttt{cbruderer@phys.ethz.ch}
+	\and
+	Andrina Nicola\\
+	\texttt{andrinaa@phys.ethz.ch}
+	\and
+	Anna Weigel\\
+	\texttt{anweigel@phys.ethz.ch}
+}
+\title{Spurious relationships in Twitter data\\
+	 	 \large Data Science in Techno-Socio-Economic Systems\\
+	 	 \large Spring Semester 2016}
 
-\textbf{Report: Spurious relationships in social media data}
+\begin{document}
+\date{}
+\maketitle
 
 \begin{abstract}
-... Claudio ...
+... Claudio ...\\
+include link to website
 \end{abstract}
 
 
 \vspace{0.2in}
 
 \section{Introduction (Anna)}
-... Proposal ...
+We have entered the era of Big Data and the wealth of information available to us entails its own new challenges. Relationships between quantities, whether real or without any obvious causal link, will naturally arise if the data sets are large enough (for examples see \cite{tyler_vigen}). Even though we might be inclined to interpret apparent links between measurements, a correlation does not imply causation. One needs to find a way to distinguish spurious relationships between measurements from those with a causal link, and quantify the frequency of chance correlations occurring.
 
+Based on a list of pre-defined keywords and Twitter data, we aim to show that relationships between quantities without any obvious causal link can be identified in large data sets. 
+We use a Twitter dataset which contains unfiltered tweets between \textbf{time range}. For each day, we determine the number of tweets containing one of our pre-defined keywords. We then measure and quantify the time-correlation functions between the popularity of various keywords. To test our method we recover and quantify expected correlations between synonyms or related keywords. We  additionally investigate and discuss the performance of different correlation measures.
 
 \section{Data (Claudio)}
 \subsection{Keywords}
-... List keywords ...
+... List keywords ...\\
+maybe also mention why keywords are not suited, e.g. who or right
 
 \subsection{Dataset}
 ... Twitter dataset ...
@@ -80,13 +98,23 @@ In order to find relationships between the keywords we will proceed in two steps
 
 
 \section{Acknowledgements}
-...
+This project was part of the lecture \textit{Data Science in Techno-Socio-Economic Systems} given by Dr. Evangelos Pournaras, Prof. Dr. Dirk Helbing and Dr. Izabela Moise at ETH Zurich during the spring semester 2016. We would like to thank Dr. Izabela Moise and Dr. Rok Roskar for the valuable guidance and helpful discussions. We used \textsc{Apache Spark} \cite{spark}  to query the Twitter data, and \textsc{Python} \cite{python} and \textsc{bokeh} \cite{bokeh} for the data analysis and visualization. The website was built on a \textsc{html5up} \cite{html5up} template.
 
 \begin{thebibliography}{9}
 
+\bibitem{tyler_vigen}
+\url{http://tylervigen.com/spurious-correlations}
 \bibitem{dettling14}
 Marcel Dettling, Applied Time Series Analysis, SS 2014, Zurich University of Applied Sciences, 
 \url{https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf}
+\bibitem{spark}
+\url{http://spark.apache.org}
+\bibitem{python}
+\url{https://www.python.org}
+\bibitem{bokeh}
+\url{http://bokeh.pydata.org/en/latest/}
+\bibitem{html5up}
+\url{http://html5up.net}
 
 \end{thebibliography}
 

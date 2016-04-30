@@ -1,0 +1,299 @@
+<!DOCTYPE HTML>
+<!--
+	Miniport by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Spurious relationships in Twitter data</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+		<script type="text/x-mathjax-config">
+  			MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+		</script>
+		<script type="text/javascript" async
+  			src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+		</script>
+		<script type="text/x-mathjax-config">
+  			MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });
+		</script>
+	</head>
+	<body>
+
+		<!-- Nav -->
+			<nav id="nav">
+				<ul class="container">
+					<li><a href="#Top">Top</a></li>
+					<li><a href="#Introduction">Introduction</a></li>
+					<li><a href="#Data">Data</a></li>
+					<li><a href="#Time">Time Series Analysis</a></li>
+					<li><a href="#Results">Results</a></li>
+					<li><a href="#Conclusion">Conclusion</a></li>
+					<li><a href="#Acknowledgements">Acknowledgements</a></li>
+					<li><a href="#Contact">Contact</a></li>
+				</ul>
+			</nav>
+
+		<!-- Header -->
+			<div class="wrapper style1 first">
+				<article class="container" id="top">
+					<div class="row">
+						<div class="4u 12u(mobile)">
+							<span class="image fit"><img src="images/pic00.jpg" alt="" /></span>
+						</div>
+						<div class="8u 12u(mobile)">
+							<header>
+								<h1><strong>Spurious relationships</strong></h1>
+								<h2>in Twitter data</h2>
+							</header>
+							
+							<p><h6>Claudio Bruderer, Andrina Nicola, Anna Weigel</h6></p>
+
+							<p>Nice tagline, ideas?
+							</p>
+
+							<a href="#Results" class="button scrolly">See our results</a>
+							<ul class="social">
+							</ul>
+						</div>
+					</div>
+				</article>
+			</div>
+
+		<!-- Introduction -->
+			<div class="wrapper style2">
+				<article id="Introduction">
+					<header>
+						<h2>Introduction</h2>
+						<!--<p>Odio turpis amet sed consequat eget posuere consequat.</p>-->
+					</header>
+					<div class="container">
+						<div class="row">
+							<section class="box style1">
+								<p>
+								We have entered the era of Big Data and the wealth of information available to us entails its own new challenges. Relationships between quantities, whether real or without any obvious causal link, will naturally arise if the data sets are large enough (for examples see <a href="http://tylervigen.com/spurious-correlations">Tyler Vigen, Spurious correlations)</a>). Even though we might be inclined to interpret apparent links between measurements, a correlation does not imply causation. One needs to find a way to distinguish spurious relationships between measurements from those with a causal link, and quantify the frequency of chance correlations occurring.
+								</p>
+
+								<p>
+								Based on a list of pre-defined keywords and Twitter data, we aim to show that relationships between quantities without any obvious causal link can be identified in large data sets. 
+								We use a Twitter dataset which contains unfiltered tweets between <font color="red">time range</font>. For each day, we determine the number of tweets containing one of our pre-defined keywords. We then measure and quantify the time-correlation functions between the popularity of various keywords. To test our method we recover and quantify expected correlations between synonyms or related keywords. We additionally investigate and discuss the performance of different correlation measures.
+
+								</p>
+							</section>
+						</div>
+					</div>
+				</article>
+			</div>
+
+		<!-- Data -->
+			<div class="wrapper style2">
+				<article id="Data">
+					<header>
+						<h2>Data</h2>
+						<p>Odio turpis amet sed consequat eget posuere consequat.</p>
+					</header>
+				</article>
+			</div>
+
+		<!-- Time Series Analysis -->
+			<div class="wrapper style2">
+				<article id="Time">
+					<header>
+						<h2>Time Series Analysis</h2>
+					</header>
+					<div class="container">
+						<div class="row">
+							<section class="box style1">
+								<p>The main results of the data reduction explained in the previous section, are time series of the occurence of each of the 100 keywords in the queried twitter dataset. In order to identify relationships between different keywords, we compare their occurence frequencies using three different methods based on the Pearson correlation coefficient and k means clustering.
+								</p>
+
+								<p>
+								We can determine the amount of linear dependence between two time series $X_{i}$ and $X_{j}$ using the correlation coefficient $\rho$. The correlation $\rho(\Delta t)$ between two time series is a function of the time lag $\Delta t$ between the two and is defined as <a href="https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf">(Marcel Dettling, Applied Time Series Analysis, SS 2014, Zurich University of Applied Sciences)</a>:
+								\begin{equation}
+								\rho(\Delta t) = \langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle. \label{eq:corrcoef}
+								\end{equation} 
+								For $\Delta t = 0$ we recover the usual correlation coefficient, whereas for $\Delta t \neq 0$, $\rho(\Delta t)$ quantifies the amount of linear dependence between shifted time series. If the two time series are equal i.e. $i = j$, then we recover the autocorrelation function of the time series, which quantifies the amount of linear dependence in the time series itself. In order to compare the correlation between different time series, it is customary to normalise Eq. \ref{eq:corrcoef}  by the variance of the two time series i.e. <a href="https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf">(Marcel Dettling, Applied Time Series Analysis, SS 2014, Zurich University of Applied Sciences)</a>:
+								\begin{equation}
+								\rho(\Delta t) = \frac{\langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{j, t}-\bar{X}_{j}) (X_{j, t}-\bar{X}_{j}) \rangle}}.
+								\end{equation} 
+								We can estimate the value of $\rho(\Delta t)$ from the sample covariance and variances.
+								</p>
+
+								<p>
+								In order for Eq.~\ref{eq:corrcoef} to be a valid correlation measure, the values of both time series at all times $t$ need to identically distributed (IID) random variables. This means that both time series $X_{i}$, $X_{j}$ need to be stationary i.e. that their mean $\mu$, variance $\sigma^{2}$ and autocorrelation function $\rho(\Delta t)$ do not depend explicitly on time $t$
+								\begin{align}
+								\mu &= \langle X_{i, t} \rangle, \\
+								\sigma^{2} &=  \langle (X_{i, t}-\bar{X})^{2} \rangle \\
+								\rho(\Delta t) &= \frac{\langle (X_{i, t}-\bar{X}) (X_{i, t+\Delta t}-\bar{X}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{i, t+\Delta t}-\bar{X}_{j}) (X_{i, t+\Delta t}-\bar{X}_{}) \rangle}}. 
+								\end{align} 
+								We do not expect the occurences of keywords in twitter data to be stationary time series, since the mean occurence of any keyword will for example depend on world events, its popularity and also on the number of people using twitter. We can assess if any time series is stationary by evaluating its autocorrelation function $\rho(\Delta t)$. For an IID time series, $\rho(\Delta t)$ will be close to zero whereas non stationary time series are characterised by slowly decaying autocorrelation functions.
+								In order to be able to quantify the correlation between non stationary time series we need to make the series stationary prior to evaluating Eq. \ref{eq:corrcoef}. This process is called pre-whitening. The most basic form of prewhitening of the differencing method, which allows to transform time series with a slow trend to stationary series. A time series with a trend can be written as \cite{dettling14}
+								\begin{equation}
+								X_{i, t} = T_{i, t} + R_{i, t},
+								\end{equation} 
+								where $T_{i, t}$ denotes the time series' trend and $R_{i, t}$ are random fluctuations around this trend. If the time series varies slowly, we can remove the trend by considering the differenced time series instead of the initial one. The differenced time series is defined as \cite{dettling14}
+								\begin{equation}
+								D_{i, t} = X_{i, t+1}- X_{i, t}.
+								\end{equation} 
+								If $T_{i, t}$ is slowly varying, this transformed time series will only capture the random variations around the global trend. The cross correlation between two differenced time series thus encodes the amount of linear dependence between changes in one time series from its global trend and changes in the second.
+								</p>
+
+								<p>
+								In order to find relationships between the keywords we will proceed in two steps: for illustration purposes we will compute the cross correlation between all the time series regardless of stationarity. We will then compute the autocorrelation function of all the series and recompute the correlation coefficient using the differenced time series for non stationary processes and compare theses two measures.
+								</p>
+
+							</section>
+						</div>
+					</div>
+				</article>
+			</div>
+
+		<!-- Results -->
+			<div class="wrapper style2">
+				<article id="Results">
+					<header>
+						<h2>Results</h2>
+						<p>Odio turpis amet sed consequat eget posuere consequat.</p>
+					</header>
+				</article>
+			</div>
+
+			<article id="frequency_plot">
+				<header>
+					<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.11.1.min.css" type="text/css" />
+					<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.11.1.min.css" type="text/css" />
+					<script src="https://cdn.pydata.org/bokeh/release/bokeh-0.11.1.min.js"></script>
+					<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.11.1.min.js"></script>
+				</header>
+					
+				<div>
+					<div class="plotdiv" id="5c492637-e422-4c76-a49e-5623334928cd"></div>
+					<script type="text/javascript" src="frequency_plot.js"></script>
+				</div>
+			</article>
+
+			<article id="correlations_plot">
+				<header>
+					<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.11.1.min.css" type="text/css" />
+					<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.11.1.min.css" type="text/css" />
+					<script src="https://cdn.pydata.org/bokeh/release/bokeh-0.11.1.min.js"></script>
+					<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.11.1.min.js"></script>
+				</header>
+				<div>
+					<div class="plotdiv" id="9ecd46be-c9f0-4d36-8b24-71c70a2d4336" align="center"></div>
+					<script type="text/javascript" src="correlations_plot.js"></script>
+				</div>
+			</article>
+
+
+		<!-- Conclusion -->
+			<div class="wrapper style2">
+				<article id="Conclusion">
+					<header>
+						<h2>Conclusion</h2>
+						<p>Odio turpis amet sed consequat eget posuere consequat.</p>
+					</header>
+				</article>
+			</div>
+
+		<!-- Acknowledgements -->
+			<div class="wrapper style4">
+				<article id="Acknowledgements">
+					<header>
+						<h2>Acknowledgements</h2>
+						This project was part of the lecture <i>Data Science in Techno-Socio-Economic Systems</i> given by Dr. Evangelos Pournaras, Prof. Dr. Dirk Helbing and Dr. Izabela Moise at ETH Zurich during the spring semester 2016. We would like to thank Dr. Izabela Moise and Dr. Rok Roskar for the valuable guidance and helpful discussions. We used <a href="http://spark.apache.org">Apache Spark</a> to query the Twitter data, and <a href="https://www.python.org">Python</a> and <a href="http://bokeh.pydata.org/en/latest/">Bokeh</a> for the data analysis and visualization. The website was built on a <a href="http://html5up.net">HTML5 Up</a> template.
+					</header>
+				</article>
+			</div>	
+
+		<!-- Contact -->
+			<div class="wrapper style4">
+				<article id="Contact">
+					<ul class="social">
+						<table style="width:100%">
+						  <tr>
+						    <td><h3>Claudio Bruderer</h3></td>
+						    <td><h3>Andrina Nicola</h3></td> 
+						    <td><h3>Anna Weigel</h3></td>
+						  </tr>
+						  <tr>
+						    <td>
+						    	<li><a href="https://twitter.com/cbruderer" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+						    	<p>@cbruderer</p>
+						    </td>
+						    <td>
+						    	<li><a href="" class="icon fa-twitter"><span class="label">Twitter</span></a></li>...<p></p>
+						    </td> 
+						    <td>
+						    	<li><a href="https://twitter.com/AnnaKWeigel" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+						    	<p>@annakweigel</p>	
+
+						    </td>
+						  </tr>
+						  <tr>
+						  	<td>
+						  		claudio.bruderer[at]phys.ethz[dot]ch
+						  	</td>
+						  	<td>
+						  		andrina.nicola[at]phys.ethz[dot]ch
+						  	</td>
+						  	<td>
+						  		anna.weigel[at]phys.ethz[dot]ch
+						  	</td>
+						  </tr>
+						  <tr>
+						  	<td>
+						  		Institute for Astronomy, ETH Zurich
+						  	</td>
+						  	<td>
+						  		Institute for Astronomy, ETH Zurich
+						  	</td>
+						  	<td>
+						  		Institute for Astronomy, ETH Zurich
+						  	</td>
+						  </tr>
+						</table>
+						<!--
+						<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+						<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+						<li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>
+						<li><a href="#" class="icon fa-linkedin"><span class="label">LinkedIn</span></a></li>
+						<li><a href="#" class="icon fa-tumblr"><span class="label">Tumblr</span></a></li>
+						<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
+						<li><a href="#" class="icon fa-github"><span class="label">Github</span></a></li>
+						<li><a href="#" class="icon fa-rss"><span>RSS</span></a></li>
+						<li><a href="#" class="icon fa-instagram"><span>Instagram</span></a></li>
+						<li><a href="#" class="icon fa-foursquare"><span>Foursquare</span></a></li>
+						<li><a href="#" class="icon fa-skype"><span>Skype</span></a></li>
+						<li><a href="#" class="icon fa-soundcloud"><span>Soundcloud</span></a></li>
+						<li><a href="#" class="icon fa-youtube"><span>YouTube</span></a></li>
+						<li><a href="#" class="icon fa-blogger"><span>Blogger</span></a></li>
+						<li><a href="#" class="icon fa-flickr"><span>Flickr</span></a></li>
+						<li><a href="#" class="icon fa-vimeo"><span>Vimeo</span></a></li>
+						-->
+					</ul>
+					<hr />				
+				<footer>
+					<ul id="copyright">
+						<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					</ul>
+				</footer>
+				</article>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/skel-viewport.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
