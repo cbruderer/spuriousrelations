@@ -38,7 +38,7 @@ def corr_plot(corr_array, plot_name):
                                         ))
     p = figure(title="Correlations",
                x_axis_location="above", tools="resize,hover,pan,box_zoom,wheel_zoom,reset",
-               x_range=list(reversed(names)), y_range=names)
+               x_range=list(reversed(names)), y_range=names, responsive=True)
 
     p.plot_width = 800
     p.plot_height = 800
