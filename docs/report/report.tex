@@ -16,7 +16,7 @@
 	\texttt{cbruderer@phys.ethz.ch}
 	\and
 	Andrina Nicola\\
-	\texttt{andrinaa@phys.ethz.ch}
+	\texttt{nicolaa@phys.ethz.ch}
 	\and
 	Anna Weigel\\
 	\texttt{anweigel@phys.ethz.ch}
@@ -95,7 +95,7 @@ If $T_{i, t}$ is slowly varying, this transformed time series will only capture 
 
 For non stationary time series, we can thus first perform differencing and then compute the auto and cross correlations between the differenced time series. This will encode the amount of linear dependence between changes in one time series from its global trend and changes in the second. 
 
-In order to quantify the significance of both the auto- and cross correlations, we need to compare the measured values to the expected values for uncorrelated time series. For uncorrelated time series, which are a sequence of IID variables we expect both for the auto and cross correlations $\rho(\Delta t) = 0$ with a variance of $\sigma^{2}(\rho(\Delta t)) = \frac{1}{n}$, where $n$ denotes the number of samples used to estimate the correlation \cite{dettling14}. For simplicity, we will call a cross-correlation between two time series significant if its value exceeds $\sigma^{2}(\rho(\Delta t))$, even though we do not expect the differenced time series to be perfect IID processes. 
+In order to quantify the significance of both the auto- and cross correlations, we need to compare the measured values to the expected values for uncorrelated time series. For uncorrelated time series, which are a sequence of IID variables we expect both for the auto and cross correlations $\rho(\Delta t) = 0$ with a variance of $\sigma^{2}(\rho(\Delta t)) = \frac{1}{n}$, where $n$ denotes the number of samples used to estimate the correlation \cite{dettling14}. For simplicity, we will call a cross-correlation between two time series significant if its value exceeds $1.96 \sigma(\rho(\Delta t))$ (i.e. the $95 \%$ confidence limits), even though we do not expect the differenced time series to be perfect IID processes. 
 
 In order to find relationships between the keywords we will proceed in two steps: for illustration purposes we will compute the cross correlation between all the time series regardless of stationarity. We will then compute the autocorrelation function of all the series and recompute the correlation coefficient using the differenced time series for non stationary processes and compare theses two measures.
 
