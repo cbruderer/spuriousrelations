@@ -81,7 +81,7 @@ geneva
 # technology
 apple
 linux
-PC
+pc
 google
 iphone
 galaxy

@@ -5,6 +5,9 @@
 \usepackage{lipsum}% Just for this example
 \usepackage{url}
 \usepackage{amsmath}
+\usepackage{adjustbox}
+\usepackage{graphicx}
+\usepackage{footnote}
 \setlength{\parindent}{0pt}% No paragraph indent
 \pagestyle{empty}% No page headers/footers
 
@@ -43,13 +46,58 @@ We have entered the era of Big Data and the wealth of information available to u
 Based on a list of pre-defined keywords and Twitter data, we aim to show that relationships between quantities without any obvious causal link can be identified in large data sets. 
 We use a Twitter dataset which contains unfiltered tweets between \textbf{time range}. For each day, we determine the number of tweets containing one of our pre-defined keywords. We then measure and quantify the time-correlation functions between the popularity of various keywords. To test our method we recover and quantify expected correlations between synonyms or related keywords. We  additionally investigate and discuss the performance of different correlation measures.
 
-\section{Data (Claudio)}
-\subsection{Keywords}
-... List keywords ...\\
-maybe also mention why keywords are not suited, e.g. who or right
-
+\section{Data}
 \subsection{Dataset}
-... Twitter dataset ...
+In order to identify relationships between words, we need a suitable data set containing a large amount of text data and covering an extended period of time. Data fromm all major social media platforms primarily using text as a medium (e.g. Twitter \cite{twitter}, Facebook \cite{facebook}, and Reddit \cite{reddit}) satisfy these conditions. As 
+
+\subsection{Keyword selection}
+\begin{center}
+  \begin{adjustbox}{max width=\textwidth}\label{tab:keywords}
+    \begin{tabular}{ | l | l | l | l | l | }
+    \hline
+    Terrorism / Religion & Refugees & Ebola & Influenza & Science \\ \hline
+    isis & syria & ebola & influenza & bitcoin \\
+    terrorism & refugees & guinea & flu & rosetta \\
+    arab & migrants & sierra & birds & comet \\
+    spring & africa & leone & swine & higgs \\
+    attack & italy & liberia & pig & climate \\
+    god & ethiopia & virus &  & doomsday \\
+    christian & asylum & epidemic &  & maya \\
+    allah & unhcr & vaccine &  & curiosity \\
+    islam & immigration & who &  & sandy \\
+     & foreigners &  &  & hurricane \\
+     & crowded &  &  & \\ \hline \hline
+    Discrimination & Countries / Cities & Technology & Everyday life & Food / Trends \\ \hline
+    black & boston & apple & homework & vegan \\
+    white & marathon & linux & television & gluten \\
+    mandela & london & pc & coffee & vegetarian \\
+    nelson & europe & google & tea & meat \\
+    left & usa & iphone & school & pasta \\
+    right & philippines & galaxy & work & banana \\
+     & sochi & watch & teacher & \\
+     & olympics & facebook & sports & \\
+     & geneva & twitter & jogging & \\
+     &  & whatsapp &  & \\ \hline \hline
+    Malaysian Airlines & Ukraine / Crimea & Politics & Family & \\ \hline
+    mh17 & ukraine & snowden & family & \\
+    mh370 & crimea & nsa & divorce & \\
+     & russia & obama & marriage & \\
+     &  & putin & wedding & \\
+     &  & pope & holidays & \\
+     &  & unemployment &  & \\
+    \hline
+    \end{tabular}
+  \end{adjustbox}
+  \caption{Table 2.1 - Table listing all the keywords used in our analysis and how their grouped by topic.}
+\end{center}
+
+In our analysis we select one hundred keywords. All these keywords are listed in Table~\ref{tab:keywords}.
+
+To choose this keywords, we applied different criteria. First, we identified major events that happened during the period we have access to twitter data (May 2014 - July 2014 and September 2014 - December 2014). For these topics then, we selected related words, on purpose also including synonyms. Besides these `major events categories` we also have words related to long-term trends we {\it a priori} expect to find in the data (e.g. `Food / Trends`, `Refugees`, `Politics`). Furthermore, we have a group of keywords on `Everyday life` for which we {\it a priori} do not expect to see strong trends.
+
+These selection criteria were chosen to address various problems. First, by picking words related to major events localized in time (e.g. Rosetta satellite \cite{rosetta} dispatching Philae lander), we are able to test our pipeline and assert that this {\it a priori} expected quick rise in mentions on social media platforms is identified in our data as well. Second, by including several synonyms, it is reasonable to expect certain correlations between the keywords, hence allowing us to validate our analysis in a second, independent way. Third, the keywords for which we do not {\it a priori} expect the number of mentions over time to display a lot of structure (e.g. `Everyday life`), should only weakly correlate with other keywords displaying more structure.
+
+We note however that there are caveats in this type of analysis. Many words have different meanings and could thus potentially correlate or not correlate with other words depending on which meaning is more common. As an example, we include `who` in our analysis. While it is primarily used as a pronoun, it is also the abbreviation of the World Health Organization \cite{who}. Due to the Ebola outbreak in Western Africa in 2014, we expect this secondary meaning to modulate the number of mentions over time curve, and potentially display correlations with related words (e.g. `ebola`). Other examples of words with multiple meanings include `right` (opposite of wrong; political perspective; direction) and `left` (past participle of leave; political perspective; direction).
 
 \subsection{Data analysis}
 ... Describe how we reduce Twitter data with pyspark ...
@@ -114,17 +162,16 @@ This project was part of the lecture \textit{Data Science in Techno-Socio-Econom
 
 \bibitem{tyler_vigen}
 \url{http://tylervigen.com/spurious-correlations}
-\bibitem{dettling14}
-Marcel Dettling, Applied Time Series Analysis, SS 2014, Zurich University of Applied Sciences, 
-\url{https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf}
-\bibitem{spark}
-\url{http://spark.apache.org}
-\bibitem{python}
-\url{https://www.python.org}
-\bibitem{bokeh}
-\url{http://bokeh.pydata.org/en/latest/}
-\bibitem{html5up}
-\url{http://html5up.net}
+\bibitem{twitter}\url{http://www.esa.int/Our_Activities/Space_Science/Rosetta}
+\bibitem{reddit}\url{http://www.esa.int/Our_Activities/Space_Science/Rosetta}
+\bibitem{facebook}\url{http://www.esa.int/Our_Activities/Space_Science/Rosetta}
+\bibitem{rosetta}\url{http://www.esa.int/Our_Activities/Space_Science/Rosetta}
+\bibitem{who}\url{http://www.who.int/en/}
+\bibitem{dettling14} Marcel Dettling, Applied Time Series Analysis, SS 2014, Zurich University of Applied Sciences, \url{https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf}
+\bibitem{spark}\url{http://spark.apache.org}
+\bibitem{python}\url{https://www.python.org}
+\bibitem{bokeh}\url{http://bokeh.pydata.org/en/latest/}
+\bibitem{html5up}\url{http://html5up.net}
 
 \end{thebibliography}
 
