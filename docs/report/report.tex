@@ -8,6 +8,7 @@
 \usepackage{adjustbox}
 \usepackage{graphicx}
 \usepackage{footnote}
+\usepackage{subcaption}
 \setlength{\parindent}{0pt}% No paragraph indent
 \pagestyle{empty}% No page headers/footers
 
@@ -44,7 +45,7 @@ include link to website
 We have entered the era of Big Data and the wealth of information available to us entails its own new challenges. Relationships between quantities, whether real or without any obvious causal link, will naturally arise if the data sets are large enough (for examples see \cite{tyler_vigen}). Even though we might be inclined to interpret apparent links between measurements, a correlation does not imply causation. One needs to find a way to distinguish spurious relationships between measurements from those with a causal link, and quantify the frequency of chance correlations occurring.
 
 Based on a list of pre-defined keywords and Twitter data, we aim to show that relationships between quantities without any obvious causal link can be identified in large data sets. 
-We use a Twitter dataset which contains unfiltered tweets between \textbf{time range}. For each day, we determine the number of tweets containing one of our pre-defined keywords. We then measure and quantify the time-correlation functions between the popularity of various keywords. To test our method we recover and quantify expected correlations between synonyms or related keywords. We  additionally investigate and discuss the performance of different correlation measures.
+We use a Twitter dataset which contains unfiltered tweets between May 2014 - July 2014 and September 2014 - December 2014. For each day, we determine the number of tweets containing one of our pre-defined keywords. We then measure and quantify the time-correlation functions between the popularity of various keywords. To test our method we recover and quantify expected correlations between synonyms or related keywords. We  additionally investigate and discuss the performance of different correlation measures.
 
 \section{Data}
 \subsection{Dataset}
@@ -150,14 +151,44 @@ In order to quantify the significance of both the auto- and cross correlations, 
 \subsection{Missing data}
 The above considerations assume that there is no missing time series data, which is rarely the case in reality. Several pieces of data are missing in the twitter dataset. First of all we do not have access to data for most of August 2014 and furthermore there are several days missing thoughout. In order to be able to analyse the data, we therefore fill the missing values using random samples drawn from a normal distribution with the mean and variance of the respective time series. This procedure will keep mean and standard deviation constant and will not introduce any correlations between different time series.
 
-In order to find relations between keywords, we will proceed in two steps: for illustration purposes we will compute the cross correlation between all the time series (filled as explained above) regardless of stationarity. We will then compute the autocorrelation function of all the series and recompute the correlation coefficient using the differenced time series for non stationary processes and compare theses two measures. 
+In order to find relations between keywords, we will proceed in two steps: for illustration purposes we will compute the cross correlation between all the time series (filled as explained above) regardless of stationarity for timelags $-10 \leq \Delta t \leq 10$. We will then compute the autocorrelation function of all the series and recompute the correlation coefficients using the differenced time series for non stationary processes. For both methods, we assign the highest correlation coefficient (regardless of timelag $\Delta t$) to each pair and compare the results obtained with these two measures. 
 
 \section{Results (Anna, Andrina)}
-...
+The occurrence of different keywords over time displays different behaviour depending on the keyword. Keywords from the everyday life and family sections for example feature stationary time series with little to no variation. On the other hand, keywords associated to major events show significant trends and structure. Examples for both these cases are shown in Fig.~\ref{ig:timeseries}.  The Figure shows the time series for the words \textit{banana} and \textit{mh17}. \textit{MH17} is the abbreviation for the Malaysian airlines flight 17, which was shot down over the Ukraine on July, 17th 2014. We see that the mentions of \textit{MH17} are concentrated in this period while the word banana appears with a constant frequency over the 6 months we have analysed. Another interesting example is the word \textit{apple}, which denotes the fruit as well as the company. We would expect the frequency of the word \textit{apple} to be fairly time-independent, but from the plot we see that the number of mentions features a strong peak in September, 2014. This is probably caused by apple holding its keynote speech during this period of the year. This example shows that many words can have different meanings depending on the context or language which can cause \textit{a priori} unexpected features in the time series. 
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.7\linewidth]{figs/banana.pdf}
+  \caption{Occurrence frequency for \textit{banana}.}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.7\linewidth]{figs/mh17.pdf}
+  \caption{Occurrence frequency for \textit{mh17}.}
+  \label{fig:sub2}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.7\linewidth]{figs/apple.pdf}
+  \caption{Occurrence frequency for \textit{apple}.}
+  \label{fig:sub2}
+\end{subfigure}
+\caption{Mean subtracted number of keyword occurrences as a function of time normalised by the standard deviation of the time series.}
+\label{fig:timeseries}
+\end{figure}
+
+The cross correlation coefficients between keyword pairs for both methods are shown in Fig. bla. As expected, we see a correlation of 1 on the diagonal, corresponding to the auto correlations. The correlation matrix has a block-diagonal form corresponding to the correlations within keyword groups, e.g. keywords within the refugees and terrorism categories. Comparing the two correlation measures, we find that the correlations computed from the differenced time series are more pronounced than the ones computed using the raw data. This is unexpected, since we would have naively expected, the latter method to generally overestimate correlations. 
+
+As can be seen from the figure, we are able to retrieve expected correlations, such as correlation between \textit{nelson} and \textit{mandela} or \textit{refugees} and \textit{syria}. However, we also find several unexpected and probably spurious correlations between keywords such as \textit{mh370} and \textit{swine} or \textit{linux} and \textit{allah}. 
+This is probably both due to the simple methods employed to compute correlations as well as that computing correlations between noisy datasets without clear features is generally a difficult problem.
 
 
 \section{Conclusion (All)}
-...
+In this project we analysed roughly six months of unfiltered twitter data by querying the tweets for a set of 100 predefined keywords. We aimed at recovering correlations between the occurrence frequencies of related keywords and showing that spurious relationships can be detected in large datasets. We used both the time series of the number of tweets per day containing a particular keyword and its differenced counterpart to compute correlation coefficients for pairs of keywords. 
+
+While we found large correlation coefficients for \textit{a priori} expected keyword pairs, we also measured a significant number of unexpected and probably spurious correlations.
 
 
 \section{Acknowledgements}
