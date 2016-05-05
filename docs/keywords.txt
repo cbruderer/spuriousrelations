@@ -19,7 +19,6 @@ asylum
 unhcr
 immigration
 foreigners 
-crowded
 # ebola
 ebola
 guinea
@@ -50,8 +49,7 @@ hurricane
 # discrimination 
 black
 white
-mandela
-nelson
+crowded
 left 
 right
 # malaysian airlines 
@@ -66,18 +64,19 @@ snowden
 nsa
 obama
 putin
+mandela
+nelson
 pope
 unemployment 
 # countries/cities
-boston
-marathon
-london
 europe
 usa
 philippines
 sochi
 olympics
 geneva
+boston
+london
 # technology
 apple
 linux
@@ -112,3 +111,4 @@ work
 teacher
 sports
 jogging
+marathon

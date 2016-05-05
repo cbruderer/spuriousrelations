@@ -14,11 +14,11 @@ from bokeh.resources import CDN
 from bokeh.models import HoverTool
 
 
-def get_keys(path='keywords.txt'):
+def get_keys(path='../docs/keywords.txt'):
     keys = np.genfromtxt(path, dtype="|S20", delimiter='#', autostrip=True)
     return keys
 
-def get_events(path='world_events_2014.txt'):
+def get_events(path='../docs/world_events_2014.txt'):
     from StringIO import StringIO
     data = np.loadtxt(path, dtype=str, delimiter=',')
     day = np.array(data[:, 0], dtype=int)
@@ -162,9 +162,9 @@ def freq_plot(freq_array, date_array, plot_name,
 # testing
 
 import pickle
-f = open('datetime.pkl', 'rb')
+f = open('../data/datetime.pkl', 'rb')
 
 dates = pickle.load(f)
-frequencies = np.load('freq_variations.npy')
+frequencies = np.load('../data/freq_variations.npy')
 
 freq_plot(frequencies, dates, 'frequency_plot')

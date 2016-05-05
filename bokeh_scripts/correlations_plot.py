@@ -76,13 +76,13 @@ def corr_plot(corr_array, title, plot_name):
 
 
 # raw
-raw_array = np.load('correlations_raw.npy')
+raw_array = np.load('../data/correlations_raw.npy')
 raw_title = 'Correlations between Time Series'
 raw_plot_name = 'correlations_raw'
 
 corr_plot(raw_array, raw_title, raw_plot_name)
 
-diff_array = np.load('correlations_diff.npy')
+diff_array = np.load('../data/correlations_diff.npy')
 diff_title = 'Correlations between Differenced Time Series'
 diff_plot_name = 'correlations_diff'
 
