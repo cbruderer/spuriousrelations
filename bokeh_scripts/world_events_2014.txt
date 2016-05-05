@@ -1,0 +1,44 @@
+# World Events in 2014
+# (0) Day
+# (1) Month
+# (2) Year
+# Sources: 
+# https://en.wikipedia.org/wiki/2014
+# http://www.endmemo.com/events/2014.php
+# http://www.infoplease.com/news/2014/current-events/
+29,04,2014,Nigerian School Girls Abduction
+05,05,2014,Boko Haram Takes Responsibility for Kidnapping
+13,05,2014,Turkey Mine Accident
+20,05,2014,Military Stages a Coup in Thailand
+25,05,2014,Billionaire Businessman Wins Presidential Election in Ukraine
+02,06,2014,New Palestinian Unity Government Includes Hamas
+03,06,2014,Assad Is Re-elected in a Disputed Election
+11,06,2014,Members of ISIS take control of Mosul
+12,06,2014,Beginning of the FIFA World Cup in Brazil
+20,06,2014,Poroshenko Declares Unilateral Cease-fire in Ukraine
+01,07,2014,ISIS Declares Territory in Iraq
+02,07,2014,Murders of Israeli and Palestinian Teenagers Increases Tension
+13,07,2014,Germany wins FIFA World Cup
+16,07,2014,U.S. and EU Place New Sanctions on Russia
+17,07,2014,Malaysia Airlines Flight 17  crashes in eastern Ukraine after being shot down by a missile
+24,07,2014,Air Algérie Flight 5017 crashes in Mali
+30,07,2014,Ebola Virus Outbreak
+01,09,2014,Refugees fleeing from ISIS pour into Turkey 
+02,09,2014,Houthis Take Advantage of Instability in Yemen
+05,09,2014,Ukraine Cease-Fire Begins
+18,09,2014,Scotland Votes to Remain with UK
+22,09,2014,The United States and several Arab partners begin their airstrike campaign in Syria
+28,09,2014,Police Attempt to Crack Down on Protests in Hong Kong
+14,10,2014,U.S. Launches Airstrikes on Kobani
+11,11,2014,China and U.S. Reach Landmark Agreement on Climate Change
+12,11,2014,The Rosetta spacecraft's Philae probe successfully lands on Comet 67P
+18,11,2014,Five Killed at Synagogue in Jerusalem
+25,11,2014,Hong Kong Protests Intensify
+29,11,2014,Court Drops Charges Against Mubarak
+02,12,2014,Netanyahu Fires Cabinet, Calls Early Elections
+14,12,2014,Hong Kong Protests End
+15,12,2014,Armed Man Holds Hostages in Sydney Cafe
+17,12,2014,U.S. President Barack Obama announces the resumption of normal relations between the U.S. and Cuba
+28,12,2014,Indonesia AirAsia Flight 8501 crashes into the Java Sea just southwest of Borneo
+
+
