@@ -115,7 +115,7 @@ def freq_plot(freq_array, date_array, plot_name,
     all_dates = [datetime.datetime(y[i], m[i], d[i]) for i in range(y.shape[0])]
 
     event_source = ColumnDataSource(data=dict(date_x=all_dates,
-                                              date_y=[1 for x in all_dates],
+                                              date_y=[10 for x in all_dates],
                                               event=e,
                                               date=[x.strftime('%m-%d-%Y') for x in all_dates]))
     event_points = plot.circle(x='date_x', y='date_y', size=20,
@@ -162,9 +162,9 @@ def freq_plot(freq_array, date_array, plot_name,
 # testing
 
 import pickle
-f = open('test.txt', 'rb')
+f = open('datetime.pkl', 'rb')
 
 dates = pickle.load(f)
-frequencies = np.random.rand(100, len(dates))
+frequencies = np.load('freq_variations.npy')
 
 freq_plot(frequencies, dates, 'frequency_plot')
