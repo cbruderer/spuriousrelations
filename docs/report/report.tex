@@ -145,6 +145,7 @@ X_{i, t} = T_{i, t} + R_{i, t},
 where $T_{i, t}$ denotes the time series' trend and $R_{i, t}$ are random fluctuations around this trend. These fluctuations $R_{i, t}$ are generally correlated random variables with mean zero. If the time series varies slowly, we can remove the trend by considering the differenced time series instead of the initial one. The differenced time series is defined as \cite{dettling14}
 \begin{equation}
 D_{i, t} = X_{i, t+1}- X_{i, t}.
+\label{eq:diff}
 \end{equation} 
 If $T_{i, t}$ is slowly varying, this transformed time series will only capture the random variations around the global trend and will thus approximately be stationary.
 
@@ -158,7 +159,32 @@ The above considerations assume that there is no missing time series data, which
 In order to find relations between keywords, we will proceed in two steps: for illustration purposes we will compute the cross correlation between all the time series (filled as explained above) regardless of stationarity for timelags $-10 \leq \Delta t \leq 10$. We will then compute the autocorrelation function of all the series and recompute the correlation coefficients using the differenced time series for non stationary processes. For both methods, we assign the highest correlation coefficient (regardless of timelag $\Delta t$) to each pair and compare the results obtained with these two measures. 
 
 \section{Results (Anna, Andrina)}
-The occurrence of different keywords over time displays different behaviour depending on the keyword. Keywords from the everyday life and family sections for example feature stationary time series with little to no variation. On the other hand, keywords associated to major events show significant trends and structure. Examples for both these cases are shown in Fig.~\ref{ig:timeseries}.  The Figure shows the time series for the words \textit{banana} and \textit{mh17}. \textit{MH17} is the abbreviation for the Malaysian airlines flight 17, which was shot down over the Ukraine on July, 17th 2014. We see that the mentions of \textit{MH17} are concentrated in this period while the word banana appears with a constant frequency over the 6 months we have analysed. Another interesting example is the word \textit{apple}, which denotes the fruit as well as the company. We would expect the frequency of the word \textit{apple} to be fairly time-independent, but from the plot we see that the number of mentions features a strong peak in September, 2014. This is probably caused by apple holding its keynote speech during this period of the year. This example shows that many words can have different meanings depending on the context or language which can cause \textit{a priori} unexpected features in the time series. 
+The occurrence of different keywords over time displays different behaviour depending on the keyword. Keywords from the everyday life and family sections for example feature stationary time series with little to no variation. On the other hand, keywords associated to major events show significant trends and structure. Examples for both these cases are shown in Figures \ref{fig:timeseries_abs} and \ref{fig:timeseries_rel}.  The Figures show the absolute and relative time series for the words \textit{banana} and \textit{MH17} respectively. \textit{MH17} is the abbreviation for the Malaysian airlines flight 17, which was shot down over the Ukraine on July, 17th 2014. We see that the mentions of \textit{MH17} are concentrated in this period while the word banana appears with a constant frequency over the 6 months we have analysed. Another interesting example is the word \textit{apple}, which denotes the fruit as well as the company. We would expect the frequency of the word \textit{apple} to be fairly time-independent, but from the plot we see that the number of mentions features a strong peak in September, 2014. This is probably caused by apple holding its keynote speech during this period of the year. This example shows that many words can have different meanings depending on the context or language which can cause \textit{a priori} unexpected features in the time series. 
+
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.7\linewidth]{figs/banana_absolute.pdf}
+  \caption{Occurrence frequency for \textit{banana}.}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.7\linewidth]{figs/mh17_absolute.pdf}
+  \caption{Occurrence frequency for \textit{MH17}.}
+  \label{fig:sub2}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.7\linewidth]{figs/apple_absolute.pdf}
+  \caption{Occurrence frequency for \textit{apple}.}
+  \label{fig:sub2}
+\end{subfigure}
+\caption{Absolute number of keyword occurrences as a function of time.}
+\label{fig:timeseries_abs}
+\end{figure}
+
 \begin{figure}
 \centering
 \begin{subfigure}{.5\textwidth}
@@ -170,7 +196,7 @@ The occurrence of different keywords over time displays different behaviour depe
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.7\linewidth]{figs/mh17.pdf}
-  \caption{Occurrence frequency for \textit{mh17}.}
+  \caption{Occurrence frequency for \textit{MH17}.}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
@@ -180,12 +206,30 @@ The occurrence of different keywords over time displays different behaviour depe
   \label{fig:sub2}
 \end{subfigure}
 \caption{Mean subtracted number of keyword occurrences as a function of time normalised by the standard deviation of the time series.}
-\label{fig:timeseries}
+\label{fig:timeseries_rel}
 \end{figure}
+
+From Figures \ref{fig:timeseries_abs} and \ref{fig:timeseries_rel}, we see that in general, the time series are not stationary. We therefore transform all the time series by differencing, as outlined in Eq.~\ref{eq:diff}. The differenced time series for the keyword \textit{MH17} are shown in Fig.~\ref{fig:diff_acf} along with its autocorrelation function. We see that the differenced time series is largely stationary, even though \textit{MH17} is one of the most strongly varying keywords in our sample. This is confirmed by the autocorrelation function.
 
 The cross correlation coefficients between keyword pairs for both methods are shown in Fig. bla. As expected, we see a correlation of 1 on the diagonal, corresponding to the auto correlations. The correlation matrix has a block-diagonal form corresponding to the correlations within keyword groups, e.g. keywords within the refugees and terrorism categories. Comparing the two correlation measures, we find that the correlations computed from the differenced time series are more pronounced than the ones computed using the raw data. This is unexpected, since we would have naively expected, the latter method to generally overestimate correlations. 
 
-As can be seen from the figure, we are able to retrieve expected correlations, such as correlation between \textit{nelson} and \textit{mandela} or \textit{refugees} and \textit{syria}. However, we also find several unexpected and probably spurious correlations between keywords such as \textit{mh370} and \textit{swine} or \textit{linux} and \textit{allah}. 
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.7\linewidth]{figs/mh17_diff.pdf}
+  \caption{Differenced time series for \textit{MH17}.}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.7\linewidth]{figs/mh17_acf.pdf}
+  \caption{Autocorrelation function for \textit{MH17}.}
+\end{subfigure}
+\caption{Differenced time series and autocorrelation function for \textit{MH17}. The dashed lines indicate $95 \%$ confidence intervals for IID data.}
+\label{fig:diff_acf}
+\end{figure}
+
+As can be seen from the figure, we are able to retrieve expected correlations, such as correlation between \textit{nelson} and \textit{mandela} or \textit{refugees} and \textit{syria}. However, we also find several unexpected and probably spurious correlations between keywords such as \textit{MH370} and \textit{swine} or \textit{linux} and \textit{allah}. 
 This is probably both due to the simple methods employed to compute correlations as well as that computing correlations between noisy datasets without clear features is generally a difficult problem.
 
 
