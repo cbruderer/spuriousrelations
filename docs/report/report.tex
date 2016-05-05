@@ -88,7 +88,7 @@ In order to identify relationships between words, we need a suitable data set co
     \hline
     \end{tabular}
   \end{adjustbox}
-  \caption{Table 2.1 - Table listing all the keywords used in our analysis and how their grouped by topic.}
+  \caption{Table 2.1 - Table listing all the keywords used in our analysis and how they are grouped by topic.}
 \end{center}
 
 In our analysis we select one hundred keywords. All these keywords are listed in Table~\ref{tab:keywords}.
@@ -108,6 +108,7 @@ We note however that there are caveats in this type of analysis. Many words have
 
 The main results of the data reduction explained in the previous section, are time series of the occurrence of each of the 100 keywords in the queried twitter dataset. In order to identify relationships between different keywords, we compare their occurrence frequencies using three different methods based on the Pearson correlation coefficient and k means clustering. 
 
+\subsection{Correlation between stationary time series}
 We can determine the amount of linear dependence between two time series $X_{i}$ and $X_{j}$ using the correlation coefficient $\rho$. The correlation $\rho(\Delta t)$ between two time series is a function of the time lag $\Delta t$ between the two and is defined as \cite{dettling14}
 \begin{equation}
 \rho_{ij}(\Delta t) = \langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle, \label{eq:corrcoef}
@@ -129,6 +130,7 @@ Only in this case, can we replace the ensemble averages in Equations \ref{eq:cor
 \rho_{ij}(\Delta t) &= \frac{\sum_{t=1}^{n-\Delta t} (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j})}{\sqrt{\sum_{t=1}^{n} (X_{i, t}-\bar{X}_{i})^{2}\sum_{t=1}^{n} (X_{j, t}-\bar{X}_{j})^{2}}}.
 \end{align} 
 
+\subsection{Differencing of non-stationary time series}
 We do not expect the occurrences of keywords in twitter data to be stationary time series, since the mean occurrence of any keyword will for example depend on world events, its popularity and also on the number of people using twitter. We can roughly assess if any time series is stationary by visually inspecting the time series plot and also by computing its autocorrelation function $\rho(\Delta t)$. Non stationary time series are generally characterised by clear patterns in the autocorrelation functions because consecutive values are strongly correlated through the common trend.
 
 In order to be able to quantify the correlation between non stationary time series we need to make the series stationary prior to evaluating Equations \ref{eq:corrcoef} and \ref{eq:corrcoef1}. The most basic form is called differencing, which allows us to transform time series with a slow trend to stationary series. A time series with a trend can be written as \cite{dettling14}
@@ -145,7 +147,8 @@ For non stationary time series, we can thus first perform differencing and then 
 
 In order to quantify the significance of both the auto- and cross correlations, we need to compare the measured values to the expected values for uncorrelated time series. For uncorrelated time series, which are a sequence of IID variables we expect both for the auto and cross correlations $\rho(\Delta t) = 0$ with a variance of $\sigma^{2}(\rho(\Delta t)) = \frac{1}{n}$, where $n$ denotes the number of samples used to estimate the correlation \cite{dettling14}. For simplicity, we will call a cross-correlation between two time series significant if its value exceeds $1.96 \sigma(\rho(\Delta t))$ (i.e. the $95 \%$ confidence limits), even though we do not expect the differenced time series to be perfect IID processes. 
 
-The above considerations assume that there is no missing time series data, which is rarely the case in reality. The twitter dataset for example, has several days missing. In order to be able to analyse the data, we therefore fill the missing values using random samples drawn from a normal distribution with the mean and variance of the respective time series. This procedure will keep mean and standard deviation constant and will not introduce any correlations between different time series.
+\subsection{Missing data}
+The above considerations assume that there is no missing time series data, which is rarely the case in reality. Several pieces of data are missing in the twitter dataset. First of all we do not have access to data for most of August 2014 and furthermore there are several days missing thoughout. In order to be able to analyse the data, we therefore fill the missing values using random samples drawn from a normal distribution with the mean and variance of the respective time series. This procedure will keep mean and standard deviation constant and will not introduce any correlations between different time series.
 
 In order to find relations between keywords, we will proceed in two steps: for illustration purposes we will compute the cross correlation between all the time series (filled as explained above) regardless of stationarity. We will then compute the autocorrelation function of all the series and recompute the correlation coefficient using the differenced time series for non stationary processes and compare theses two measures. 
 
