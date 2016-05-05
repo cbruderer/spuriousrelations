@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def get_keys(path='keywords.txt'):
+def get_keys(path='../docs/keywords.txt'):
     keys = np.genfromtxt(path, dtype="|S20", delimiter='#', autostrip=True)
     return keys
 

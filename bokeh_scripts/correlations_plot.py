@@ -1,6 +1,6 @@
 import numpy as np
 
-def corr_plot(corr_array, plot_name):
+def corr_plot(corr_array, title, plot_name):
 
     from bokeh.plotting import figure, show, output_file
     from bokeh.models import HoverTool, ColumnDataSource
@@ -12,23 +12,25 @@ def corr_plot(corr_array, plot_name):
     nodes = np.arange(0, np.shape(corr_array)[0], 1)
     names = list(read_keywords.get_keys())
 
-    # colormap = ["#444444", "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99",
-    #             "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6"]
     colormap = Spectral10
-    print (colormap)
 
     xname = []
     yname = []
     color = []
     corr_value = []
 
+    value_bins = np.linspace(-1, 1, 10)
+
+    def get_color(value):
+        ind = np.digitize([value], value_bins)
+        return ind[0]-1
+
     for i in range(len(nodes)):
         for j in range(len(nodes)):
             xname.append(names[i])
             yname.append(names[j])
-
             corr_value.append(corr_array[i, j])
-            color.append(colormap[int(corr_array[i, j] * 10)])
+            color.append(colormap[get_color(corr_array[i, j])])
 
     source = ColumnDataSource(data=dict(
                                         xname=xname,
@@ -36,7 +38,7 @@ def corr_plot(corr_array, plot_name):
                                         colors=color,
                                         corr=corr_value,
                                         ))
-    p = figure(title="Correlations",
+    p = figure(title=title,
                x_axis_location="above", tools="resize,hover,pan,box_zoom,wheel_zoom,reset",
                x_range=list(reversed(names)), y_range=names, responsive=True)
 
@@ -58,7 +60,7 @@ def corr_plot(corr_array, plot_name):
     ]
 
     # save output file
-    output_file(plot_name + '.html', title=plot_name)
+    output_file(plot_name + '.html', title=title)
 
     # for website
     script, div = components(p)
@@ -72,5 +74,16 @@ def corr_plot(corr_array, plot_name):
 
     show(p)
 
-test_array = np.random.rand(100, 100)
-corr_plot(test_array, 'correlations_plot')
+
+# raw
+raw_array = np.load('../data/correlations_raw.npy')
+raw_title = 'Correlations between Time Series'
+raw_plot_name = 'correlations_raw'
+
+corr_plot(raw_array, raw_title, raw_plot_name)
+
+diff_array = np.load('../data/correlations_diff.npy')
+diff_title = 'Correlations between Differenced Time Series'
+diff_plot_name = 'correlations_diff'
+
+# corr_plot(diff_array, diff_title, diff_plot_name)

@@ -44,7 +44,7 @@
 				<article class="container" id="top">
 					<div class="row">
 						<div class="4u 12u(mobile)">
-							<span class="image fit"><img src="images/pic00.jpg" alt="" /></span>
+							<span class="image fit"><img src="correlations.png" alt="" /></span>
 						</div>
 						<div class="8u 12u(mobile)">
 							<header>
@@ -81,7 +81,7 @@
 
 								<p>
 								Based on a list of pre-defined keywords and Twitter data, we aim to show that relationships between quantities without any obvious causal link can be identified in large data sets. 
-								We use a Twitter dataset which contains unfiltered tweets between <font color="red">time range</font>. For each day, we determine the number of tweets containing one of our pre-defined keywords. We then measure and quantify the time-correlation functions between the popularity of various keywords. To test our method we recover and quantify expected correlations between synonyms or related keywords. We additionally investigate and discuss the performance of different correlation measures.
+								We use a Twitter dataset which contains unfiltered tweets between May 2014 - July 2014 and September 2014 - December 2014. For each day, we determine the number of tweets containing one of our pre-defined keywords. We then measure and quantify the time-correlation functions between the popularity of various keywords. To test our method we recover and quantify expected correlations between synonyms or related keywords. We additionally investigate and discuss the performance of different correlation measures.
 
 								</p>
 							</section>
@@ -95,8 +95,35 @@
 				<article id="Data">
 					<header>
 						<h2>Data</h2>
-						<p>Odio turpis amet sed consequat eget posuere consequat.</p>
 					</header>
+					<div class="container">
+						<div class="row">
+							<section class="box style1">
+								<p>The main results of the data reduction explained in the previous section, are time series of the occurence of each of the 100 keywords in the queried twitter dataset. In order to identify relationships between different keywords, we compare their occurence frequencies using three different methods based on the Pearson correlation coefficient and k means clustering.
+								</p>
+								<header>
+								<h3>Keywords</h3>
+								<p>Our list of keywords used in our analysis and how they are grouped by topic: </p>
+								</header>
+								<section>
+									<p><b>Terrorism / Religion:</b> isis, terrorism, arab, spring, attack, god, christian, allah, islam</p>
+									<p><b>Refugees:</b> syria, refugees, migrants, africa, italy, ethiopia, asylum, unhcr, immigration, foreigners</p>
+									<p><b>Ebola:</b> ebola, guinea, sierra, leone, liberia, virus, epidemic, vaccine, who</p>
+									<p><b>Influenza:</b> influenza, flu, birds, swine, pig</p>
+									<p><b>Science:</b> bitcoin, rosetta, comet, higgs, climate, doomsday, maya, curiosity, sandy, hurricane</p>
+									<p><b>Discrimination:</b> black, white, crowded, left, right</p>
+									<p><b>Malaysian Airlines:</b> mh17, mh370</p>
+									<p><b>Ukraine/Crimea:</b> ukraine, crimea, russia</p>
+									<p><b>Politics:</b> snowden, nsa, obama, putin, mandela, nelson, pope, unemployment</p>
+									<p><b>Countries/Cities:</b> europe, usa, philippines, sochi, olympics, geneva, boston, london</p>
+									<p><b>Technology:</b> apple, linux, pc, google, iphone, galaxy, watch, facebook, twitter, whatsapp</p>
+									<p><b>Food/Trends:</b> vegan, gluten, vegetarian, meat, pasta, banana</p>
+									<p><b>Family:</b> family, divorce, marriage, wedding, holidays</p>
+									<p><b>Everyday life:</b> homework, television, coffee, tea, school, work, teacher, sports, jogging, marathon</p>
+								</section>
+							</section>
+						</div>
+					</div>
 				</article>
 			</div>
 
@@ -109,42 +136,65 @@
 					<div class="container">
 						<div class="row">
 							<section class="box style1">
-								<p>The main results of the data reduction explained in the previous section, are time series of the occurence of each of the 100 keywords in the queried twitter dataset. In order to identify relationships between different keywords, we compare their occurence frequencies using three different methods based on the Pearson correlation coefficient and k means clustering.
+								<p>The main results of the data reduction explained in the previous section, are time series of the occurrence of each of the 100 keywords in the queried twitter dataset. In order to identify relationships between different keywords, we compare their occurrence frequencies using three different methods based on the Pearson correlation coefficient and k means clustering.</p>
+
+								<h3>Correlation between stationary time series</h3>
+								<p>We can determine the amount of linear dependence between two time series $X_{i}$ and $X_{j}$ using the correlation coefficient $\rho$. The correlation $\rho(\Delta t)$ between two time series is a function of the time lag $\Delta t$ between the two and is defined as \cite{dettling14}
+								\begin{equation}
+								\rho_{ij}(\Delta t) = \langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle, \label{eq:corrcoef}
+								\end{equation} 
+								where $\langle ... \rangle$ denotes the ensemble average. For $\Delta t = 0$ we recover the usual correlation coefficient, whereas for $\Delta t \neq 0$, $\rho_{ij}(\Delta t)$ quantifies the amount of linear dependence between shifted time series. If the two time series are equal i.e. $i = j$, then we recover the autocorrelation function of the time series, which quantifies the amount of linear dependence in the time series itself. In order to compare the correlation between different time series, it is customary to normalise Eq.~\ref{eq:corrcoef} by the variance of the two time series i.e. \cite{dettling14}
+								\begin{equation}
+								\rho_{ij}(\Delta t) = \frac{\langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{j, t}-\bar{X}_{j}) (X_{j, t}-\bar{X}_{j}) \rangle}}. \label{eq:corrcoef1}
+								\end{equation}
 								</p>
 
 								<p>
-								We can determine the amount of linear dependence between two time series $X_{i}$ and $X_{j}$ using the correlation coefficient $\rho$. The correlation $\rho(\Delta t)$ between two time series is a function of the time lag $\Delta t$ between the two and is defined as <a href="https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf">(Marcel Dettling, Applied Time Series Analysis, SS 2014, Zurich University of Applied Sciences)</a>:
-								\begin{equation}
-								\rho(\Delta t) = \langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle. \label{eq:corrcoef}
-								\end{equation} 
-								For $\Delta t = 0$ we recover the usual correlation coefficient, whereas for $\Delta t \neq 0$, $\rho(\Delta t)$ quantifies the amount of linear dependence between shifted time series. If the two time series are equal i.e. $i = j$, then we recover the autocorrelation function of the time series, which quantifies the amount of linear dependence in the time series itself. In order to compare the correlation between different time series, it is customary to normalise Eq. \ref{eq:corrcoef}  by the variance of the two time series i.e. <a href="https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf">(Marcel Dettling, Applied Time Series Analysis, SS 2014, Zurich University of Applied Sciences)</a>:
-								\begin{equation}
-								\rho(\Delta t) = \frac{\langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{j, t}-\bar{X}_{j}) (X_{j, t}-\bar{X}_{j}) \rangle}}.
-								\end{equation} 
-								We can estimate the value of $\rho(\Delta t)$ from the sample covariance and variances.
-								</p>
-
-								<p>
-								In order for Eq.~\ref{eq:corrcoef} to be a valid correlation measure, the values of both time series at all times $t$ need to identically distributed (IID) random variables. This means that both time series $X_{i}$, $X_{j}$ need to be stationary i.e. that their mean $\mu$, variance $\sigma^{2}$ and autocorrelation function $\rho(\Delta t)$ do not depend explicitly on time $t$
+								When performing time series analyses we generally do not have access to the ensemble averages of the series, but we need to estimate the auto and cross correlations from the samples we have at hand. In order to be able to estimate the auto- or cross correlation using Eq.~\ref{eq:corrcoef}, the ensemble average needs to equal the sample mean i.e. the values of both time series at all times $t$ need to identically distributed random variables. This is equivalent to requiring both time series $X_{i}$, $X_{j}$ to be stationary, which means that their mean $\mu$, variance $\sigma^{2}$ and autocorrelation function $\rho_{ii}(\Delta t)$ do not depend explicitly on time $t$
 								\begin{align}
 								\mu &= \langle X_{i, t} \rangle, \\
 								\sigma^{2} &=  \langle (X_{i, t}-\bar{X})^{2} \rangle \\
-								\rho(\Delta t) &= \frac{\langle (X_{i, t}-\bar{X}) (X_{i, t+\Delta t}-\bar{X}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{i, t+\Delta t}-\bar{X}_{j}) (X_{i, t+\Delta t}-\bar{X}_{}) \rangle}}. 
+								\rho_{ii}(\Delta t) &= \frac{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t+\Delta t}-\bar{X}_{i}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{i, t+\Delta t}-\bar{X}_{i}) (X_{i, t+\Delta t}-\bar{X}_{i}) \rangle}}. 
 								\end{align} 
-								We do not expect the occurences of keywords in twitter data to be stationary time series, since the mean occurence of any keyword will for example depend on world events, its popularity and also on the number of people using twitter. We can assess if any time series is stationary by evaluating its autocorrelation function $\rho(\Delta t)$. For an IID time series, $\rho(\Delta t)$ will be close to zero whereas non stationary time series are characterised by slowly decaying autocorrelation functions.
-								In order to be able to quantify the correlation between non stationary time series we need to make the series stationary prior to evaluating Eq. \ref{eq:corrcoef}. This process is called pre-whitening. The most basic form of prewhitening of the differencing method, which allows to transform time series with a slow trend to stationary series. A time series with a trend can be written as \cite{dettling14}
-								\begin{equation}
-								X_{i, t} = T_{i, t} + R_{i, t},
-								\end{equation} 
-								where $T_{i, t}$ denotes the time series' trend and $R_{i, t}$ are random fluctuations around this trend. If the time series varies slowly, we can remove the trend by considering the differenced time series instead of the initial one. The differenced time series is defined as \cite{dettling14}
-								\begin{equation}
-								D_{i, t} = X_{i, t+1}- X_{i, t}.
-								\end{equation} 
-								If $T_{i, t}$ is slowly varying, this transformed time series will only capture the random variations around the global trend. The cross correlation between two differenced time series thus encodes the amount of linear dependence between changes in one time series from its global trend and changes in the second.
+								Only in this case, can we replace the ensemble averages in Equations \ref{eq:corrcoef} and \ref{eq:corrcoef1} with the sample means. This leads to the following estimators for the auto and cross correlation functions \cite{dettling14}:
+								\begin{align}
+								\rho_{ii}(\Delta t) &= \frac{\sum_{t=1}^{n-\Delta t} (X_{i, t}-\bar{X}_{i}) (X_{i, t+\Delta t}-\bar{X}_{i})}{\sum_{t=1}^{n} (X_{i, t}-\bar{X}_{i})^{2}} \\
+								\rho_{ij}(\Delta t) &= \frac{\sum_{t=1}^{n-\Delta t} (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j})}{\sqrt{\sum_{t=1}^{n} (X_{i, t}-\bar{X}_{i})^{2}\sum_{t=1}^{n} (X_{j, t}-\bar{X}_{j})^{2}}}.
+								\end{align}
+								<p>
+
+								<h3>Differencing of non-stationary time series</h3>
+								<p>
+								We do not expect the occurrences of keywords in twitter data to be stationary time series, since the mean occurrence of any keyword will for example depend on world events, its popularity and also on the number of people using twitter. We can roughly assess if any time series is stationary by visually inspecting the time series plot and also by computing its autocorrelation function $\rho(\Delta t)$. Non stationary time series are generally characterised by clear patterns in the autocorrelation functions because consecutive values are strongly correlated through the common trend.
 								</p>
 
 								<p>
-								In order to find relationships between the keywords we will proceed in two steps: for illustration purposes we will compute the cross correlation between all the time series regardless of stationarity. We will then compute the autocorrelation function of all the series and recompute the correlation coefficient using the differenced time series for non stationary processes and compare theses two measures.
+								In order to be able to quantify the correlation between non stationary time series we need to make the series stationary prior to evaluating Equations \ref{eq:corrcoef} and \ref{eq:corrcoef1}. The most basic form is called differencing, which allows us to transform time series with a slow trend to stationary series. A time series with a trend can be written as \cite{dettling14}
+								\begin{equation}
+								X_{i, t} = T_{i, t} + R_{i, t},
+								\end{equation} 
+								where $T_{i, t}$ denotes the time series' trend and $R_{i, t}$ are random fluctuations around this trend. These fluctuations $R_{i, t}$ are generally correlated random variables with mean zero. If the time series varies slowly, we can remove the trend by considering the differenced time series instead of the initial one. The differenced time series is defined as \cite{dettling14}
+								\begin{equation}
+								D_{i, t} = X_{i, t+1}- X_{i, t}.
+								\end{equation} 
+								If $T_{i, t}$ is slowly varying, this transformed time series will only capture the random variations around the global trend and will thus approximately be stationary.
+								</p>
+
+								<p>
+								For non stationary time series, we can thus first perform differencing and then compute the auto and cross correlations between the differenced time series. This will encode the amount of linear dependence between changes in one time series from its global trend and changes in the second.
+								</p>
+
+								<p>
+								In order to quantify the significance of both the auto- and cross correlations, we need to compare the measured values to the expected values for uncorrelated time series. For uncorrelated time series, which are a sequence of IID variables we expect both for the auto and cross correlations $\rho(\Delta t) = 0$ with a variance of $\sigma^{2}(\rho(\Delta t)) = \frac{1}{n}$, where $n$ denotes the number of samples used to estimate the correlation \cite{dettling14}. For simplicity, we will call a cross-correlation between two time series significant if its value exceeds $1.96 \sigma(\rho(\Delta t))$ (i.e. the $95 \%$ confidence limits), even though we do not expect the differenced time series to be perfect IID processes. 
+								</p>
+
+								<h3>Missing data</h3>
+								<p>
+								The above considerations assume that there is no missing time series data, which is rarely the case in reality. Several pieces of data are missing in the twitter dataset. First of all we do not have access to data for most of August 2014 and furthermore there are several days missing thoughout. In order to be able to analyse the data, we therefore fill the missing values using random samples drawn from a normal distribution with the mean and variance of the respective time series. This procedure will keep mean and standard deviation constant and will not introduce any correlations between different time series.
+								</p>
+
+								<p>
+								In order to find relations between keywords, we will proceed in two steps: for illustration purposes we will compute the cross correlation between all the time series (filled as explained above) regardless of stationarity. We will then compute the autocorrelation function of all the series and recompute the correlation coefficient using the differenced time series for non stationary processes and compare theses two measures. 
 								</p>
 
 							</section>
@@ -172,7 +222,7 @@
 				</header>
 					
 				<div class="container">
-					<div class="plotdiv" id="b8c2a0e6-9173-4dd6-ac8b-33f97c9cda90"></div>
+					<div class="plotdiv" id="82bc5c3b-80a5-4060-b3c4-0991705a7cc9"></div>
 					<script type="text/javascript" src="frequency_plot.js"></script>
 				</div>
 			</article>

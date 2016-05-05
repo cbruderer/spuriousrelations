@@ -14,11 +14,11 @@ from bokeh.resources import CDN
 from bokeh.models import HoverTool
 
 
-def get_keys(path='keywords.txt'):
+def get_keys(path='../docs/keywords.txt'):
     keys = np.genfromtxt(path, dtype="|S20", delimiter='#', autostrip=True)
     return keys
 
-def get_events(path='world_events_2014.txt'):
+def get_events(path='../docs/world_events_2014.txt'):
     from StringIO import StringIO
     data = np.loadtxt(path, dtype=str, delimiter=',')
     day = np.array(data[:, 0], dtype=int)
@@ -115,7 +115,7 @@ def freq_plot(freq_array, date_array, plot_name,
     all_dates = [datetime.datetime(y[i], m[i], d[i]) for i in range(y.shape[0])]
 
     event_source = ColumnDataSource(data=dict(date_x=all_dates,
-                                              date_y=[1 for x in all_dates],
+                                              date_y=[10 for x in all_dates],
                                               event=e,
                                               date=[x.strftime('%m-%d-%Y') for x in all_dates]))
     event_points = plot.circle(x='date_x', y='date_y', size=20,
@@ -162,9 +162,9 @@ def freq_plot(freq_array, date_array, plot_name,
 # testing
 
 import pickle
-f = open('test.txt', 'rb')
+f = open('../data/datetime.pkl', 'rb')
 
 dates = pickle.load(f)
-frequencies = np.random.rand(100, len(dates))
+frequencies = np.load('../data/freq_variations.npy')
 
 freq_plot(frequencies, dates, 'frequency_plot')
