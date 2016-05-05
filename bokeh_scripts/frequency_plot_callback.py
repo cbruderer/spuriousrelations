@@ -2,18 +2,29 @@
 from __future__ import print_function, division, absolute_import, unicode_literals
 import numpy as np
 import matplotlib.pyplot as plt
+import datetime
 
-from bokeh.palettes import Spectral3
+from bokeh.palettes import Spectral9
 from bokeh.io import curdoc, vform
 from bokeh.models import ColumnDataSource, DataRange1d, Range1d, VBoxForm, HBox, VBox, CustomJS, Slider
 from bokeh.models.widgets import Select
 from bokeh.plotting import Figure, output_file, show
 from bokeh.embed import components
 from bokeh.resources import CDN
+from bokeh.models import HoverTool
+
 
 def get_keys(path='keywords.txt'):
     keys = np.genfromtxt(path, dtype="|S20", delimiter='#', autostrip=True)
     return keys
+
+def get_events(path='world_events_2014.txt'):
+    from StringIO import StringIO
+    data = np.loadtxt(path, dtype=str, delimiter=',')
+    day = np.array(data[:, 0], dtype=int)
+    month = np.array(data[:, 1], dtype=int)
+    year = np.array(data[:, 2], dtype=int)
+    return month, day, year, data[:, 3]
 
 def key2index(key):
     keys = get_keys()
@@ -24,8 +35,12 @@ def key2index(key):
     else:
         return np.where(keys == key)[0][0]
 
+def date2index(day, month, year):
+    m, d, y, event = get_events()
+    return np.where((day == d) & (month == m) & (year == y))[0][0]
+
 def freq_plot(freq_array, date_array, plot_name,
-              init_key1='obama', init_key2='terrorism'):
+              init_key1='tea', init_key2='coffee'):
     """
     create frequency plot
     :param freq_array: columns: dates, rows: keywords
@@ -34,11 +49,10 @@ def freq_plot(freq_array, date_array, plot_name,
     """
 
     def get_dataset(key1, key2):
-        return ColumnDataSource(data=dict(dates=date_array.tolist(),
+        return ColumnDataSource(data=dict(dates=date_array,
                                           freq1=freq_array[key2index(key1), :].tolist(),
                                           freq2=freq_array[key2index(key2), :].tolist(),
                                           ))
-
     source = get_dataset(init_key1, init_key2)
 
     freq_list = freq_array.tolist()
@@ -70,29 +84,48 @@ def freq_plot(freq_array, date_array, plot_name,
     # set up plot
     plot = Figure(plot_width=1000, tools="pan,reset,"
                                          "resize,save,wheel_zoom",
-                  responsive=True)
-    plot.min_border=0
-    colormap = Spectral3
+                  responsive=True, x_axis_type='datetime')
+    plot.min_border = 0
+    colormap = Spectral9
 
     keys = get_keys()
     for i in range(len(keys)):
-        plot.line(x=date_array.tolist(), y=freq_array[i, :].tolist(),
-                  line_color=colormap[1], line_alpha=0.5,
+        plot.line(x=date_array, y=freq_array[i, :].tolist(),
+                  line_color=colormap[4], line_alpha=0.5,
                   line_width=1)
 
     plot.line(x='dates', y='freq1',
               line_width=4,
               line_alpha=1, source=source,
               line_color=colormap[0],
-              legend='keyword 1')
+              legend='keyword 1',
+             )
     plot.line(x='dates', y='freq2',
               line_width=4,
               line_alpha=1, source=source,
-              line_color=colormap[2],
-              legend='keyword 2')
-    plot.xaxis.axis_label = 'Date'
+              line_color=colormap[1],
+              legend='keyword 2',
+              )
+    plot.xaxis.axis_label = 'Date [Month/Day/Year]'
     plot.yaxis.axis_label = 'Variation relative to mean'
     plot.legend.location = 'top_right'
+
+    # show events
+    m, d, y, e = get_events()
+    all_dates = [datetime.datetime(y[i], m[i], d[i]) for i in range(y.shape[0])]
+
+    event_source = ColumnDataSource(data=dict(date_x=all_dates,
+                                              date_y=[1 for x in all_dates],
+                                              event=e,
+                                              date=[x.strftime('%m-%d-%Y') for x in all_dates]))
+    event_points = plot.circle(x='date_x', y='date_y', size=20,
+                               color=colormap[8], source=event_source,
+                               alpha=.5)
+
+    hover = HoverTool(renderers=[event_points],
+                      tooltips=[("date", "@date"), ("event", "@event")],
+                      )
+    plot.add_tools(hover)
 
     # set up widgets
     options = [str(x) + ': ' + get_keys()[x] for x in range(len(get_keys()))]
@@ -109,7 +142,6 @@ def freq_plot(freq_array, date_array, plot_name,
     inputs = HBox(key1_select, key2_select, width=400)
 
     layout = VBox(inputs, plot)
-    # layout = vform(inputs, plot)
 
     # for website
     script, html = components(layout)
@@ -128,6 +160,11 @@ def freq_plot(freq_array, date_array, plot_name,
     show(layout)
 
 # testing
-frequencies = np.random.rand(100, 100)
-dates = np.arange(0, 100, 1)
+
+import pickle
+f = open('test.txt', 'rb')
+
+dates = pickle.load(f)
+frequencies = np.random.rand(100, len(dates))
+
 freq_plot(frequencies, dates, 'frequency_plot')
