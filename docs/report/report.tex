@@ -37,11 +37,9 @@
 
 One of the main goals in data analysis of any sort, is detecting and quantifying relations between quantities. With the increasing amount of data available to us, this task becomes more challenging, since large datasets are prone to spurious correlations. It is therefore important to identify these spurious correlations in order to be able to distinguish them from causal relationships. In this project search for spurious correlations by querying twitter data for a list of pre-defined keywords and computing the correlation between keyword pairs from the time series of the keyword occurrence frequencies. We compute correlations using two separate methods and find that both methods detect both expected as well as spurious correlations. These results show that for large datasets, we are easily inclined to over-interpret the results and that conventional correlation measures need to be well understood and carefully applied. 
 
-Our results are also available online: http://spuriousrelationships.eu.pn/
+\noindent Our results are also available online: http://spuriousrelationships.eu.pn/
 
-All scripts (including \LaTeX$ $ files) used in this analysis are public and can be found here: 
-
-https://github.com/cbruderer/spuriousrelations/
+\noindent All scripts (including \LaTeX$ $ files) used in this analysis are public and can be found here: https://github.com/cbruderer/spuriousrelations/
 
 \end{abstract}
 
@@ -61,9 +59,11 @@ In order to identify relationships between words, we need a suitable data set co
 We decided to apply our analysis on Twitter data, which has been previously gathered by an ETH research group. This data set was created via the public Twitter stream \cite{twitterstream}, which downloads 1\% of the tweets posted at that moment without applying any further filtering, and covers the years 2012-2014. We analyse a subset of the whole data set, which contains data of the months May, 2014 - July, 2014 and September, 2014 - December, 2014. These data have been converted to Parquet files, thus simplyfing reading in the data.
 
 \subsection{Keyword selection}
-\begin{center}
-  \begin{adjustbox}{max width=\textwidth}\label{tab:keywords}
-    \begin{tabular}{ | l | l | l | l | l | }
+
+\begin{minipage}{\linewidth}
+  \centering
+  \captionof{table}{Selected keywords}\label{tab:keywords} 
+  \begin{tabular}{ | l | l | l | l | l | }
     \hline
     Terrorism / Religion & Refugees & Ebola & Influenza & Science \\ \hline
     isis & syria & ebola & influenza & bitcoin \\
@@ -100,16 +100,13 @@ We decided to apply our analysis on Twitter data, which has been previously gath
      &  & pope &  & \\
      &  & unemployment &  & \\
     \hline
-    \end{tabular}
-  \end{adjustbox}
-  \caption{Table 2.2: Table listing all the keywords used in our analysis and how they are grouped by topic.}
-\end{center}
+  \end{tabular}
+  % \par
+\end{minipage}
 
-In our analysis we select one hundred keywords. All these keywords are listed in Table~\ref{tab:keywords}.
+In our analysis we select one hundred keywords. All these keywords are listed in Table~\ref{tab:keywords}. To choose these keywords, we apply different criteria. First, we identify major events that happened during the period for which we have access to twitter data (May 2014 - July 2014 and September 2014 - December 2014). For these topics, we then select related words, and deliberately including synonyms as well. Besides these `major events categories` we also choose words related to long-term trends we {\it a priori} expect to find in the data (e.g. `Food / Trends`, `Refugees`, `Politics`). Furthermore, we include a group of keywords on `Everyday life` for which we {\it a priori} do not expect to see strong trends.
 
-To choose these keywords, we applied different criteria. First, we identified major events that happened during the period for which we have access to twitter data (May 2014 - July 2014 and September 2014 - December 2014). For these topics, we then selected related words, on purpose also including synonyms. Besides these `major events categories` we also chose words related to long-term trends we {\it a priori} expect to find in the data (e.g. `Food / Trends`, `Refugees`, `Politics`). Furthermore, we include a group of keywords on `Everyday life` for which we {\it a priori} do not expect to see strong trends.
-
-These selection criteria were chosen to address various problems. First, by picking words related to major events localized in time (e.g. Rosetta satellite \cite{rosetta} dispatching Philae lander), we are able to test our pipeline and assert that this {\it a priori} expected quick rise in mentions on social media platforms is identified in our data as well. Second, by including several synonyms, it is reasonable to expect certain correlations between the keywords, hence allowing us to validate our analysis in a second, independent way. Third, the keywords for which we do not {\it a priori} expect the number of mentions to display a significant structure over time (e.g. `Everyday life`), should only weakly correlate with other keywords displaying more structure.
+These selection criteria are chosen to address various problems. First, by picking words related to major events localized in time (e.g. Rosetta satellite \cite{rosetta} dispatching Philae lander), we are able to test our pipeline and assert that this {\it a priori} expected quick rise in mentions on social media platforms is identified in our data as well. Second, by including several synonyms, it is reasonable to expect certain correlations between the keywords, hence allowing us to validate our analysis in a second, independent way. Third, the keywords for which we do not {\it a priori} expect the number of mentions to display a significant structure over time (e.g. `Everyday life`), should only weakly correlate with other keywords displaying more structure.
 
 We note however that there are caveats in this type of analysis. Many words have different meanings and could thus potentially correlate or not correlate with other words depending on which meaning is more common. As an example, we include `who` in our analysis. While it is primarily used as a pronoun, it is also the abbreviation of the World Health Organization \cite{who}. Due to the Ebola outbreak in Western Africa in 2014, we expect this secondary meaning to modulate the number of mentions over time, and potentially display correlations with related words (e.g. `ebola`). Other examples of words with multiple meanings include `right` (opposite of wrong; political perspective; direction) and `left` (past participle of leave; political perspective; direction).
 
@@ -124,7 +121,15 @@ We use the \textsc{Python} front end of Apache \textsc{Spark}\cite{pyspark} call
 \label{fig:incomplete}
 \end{figure}
 
-The streaming of Twitter data was interrupted several times during the period the data were collected. Thus, minutes, hours, or even days are missing. While missing days are trivial to identify, doing so for partly incomplete daily data is more complicated. These days however would induce systematic biases to the analysis, as for all keywords the number of mentions decreases at the same time, thus inducing a strong correlation in otherwise potentially uncorrelated data.
+The streaming of Twitter data was interrupted several times during the period the data were collected. Thus, minutes, hours, or even days are missing. While missing days are trivial to identify, doing so for partly incomplete daily data is more complicated. These days however would induce systematic biases to the analysis, as for all keywords the number of mentions decreases at the same time, thus inducing artificial strong positive correlations.
+
+Without access to statistics on the streaming of the data, only an empirical correction on the reduced data set is possible. We proceed in the following way, we compute the mean and the standard deviation for the number of mentions over time for each keyword. We note the indices, which correspond to individual days, in these time series for which
+\begin{equation}
+\# \mathrm{Mentions} < \mathrm{Mean} - 1\cdot\mathrm{Std},
+\end{equation}
+and compare these indices among the keywords. We then set a threshold and consider the days incomplete, for which the number of occurences of the keyword is below the mean and standard deviation for at least 20 keywords. This process is illustrated in Figure~\ref{fig:incomplete}. 
+
+In order not to bias our analysis by, we remove the occurences of the keywords for these days then from our analysis and treat them as days for which we do not have any tweets (see Section~\ref{sec:missingdata}).
 
 All our analysis codes can be found on this public \textsc{GitHub} repository \cite{github}.
 
@@ -183,19 +188,19 @@ The occurrence of different keywords over time displays different behaviour depe
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.7\linewidth]{figs/banana_absolute.pdf}
+  \includegraphics[width=.9\linewidth]{figs/banana_absolute.pdf}
   \caption{Occurrence frequency for \textit{banana}.}
   \label{fig:sub11}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.7\linewidth]{figs/mh17_absolute.pdf}
+  \includegraphics[width=.9\linewidth]{figs/mh17_absolute.pdf}
   \caption{Occurrence frequency for \textit{MH17}.}
   \label{fig:sub12}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.7\linewidth]{figs/apple_absolute.pdf}
+  \includegraphics[width=.9\linewidth]{figs/apple_absolute.pdf}
   \caption{Occurrence frequency for \textit{apple}.}
   \label{fig:sub13}
 \end{subfigure}
@@ -207,19 +212,19 @@ The occurrence of different keywords over time displays different behaviour depe
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.7\linewidth]{figs/banana.pdf}
+  \includegraphics[width=.9\linewidth]{figs/banana.pdf}
   \caption{Occurrence frequency for \textit{banana}.}
   \label{fig:sub21}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.7\linewidth]{figs/mh17.pdf}
+  \includegraphics[width=.9\linewidth]{figs/mh17.pdf}
   \caption{Occurrence frequency for \textit{MH17}.}
   \label{fig:sub22}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.7\linewidth]{figs/apple.pdf}
+  \includegraphics[width=.9\linewidth]{figs/apple.pdf}
   \caption{Occurrence frequency for \textit{apple}.}
   \label{fig:sub23}
 \end{subfigure}
@@ -235,12 +240,12 @@ The cross correlation coefficients between keyword pairs for both methods are sh
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.7\linewidth]{figs/mh17_diff.pdf}
+  \includegraphics[width=.9\linewidth]{figs/mh17_diff.pdf}
   \caption{Differenced time series for \textit{MH17}.}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.7\linewidth]{figs/mh17_acf.pdf}
+  \includegraphics[width=.9\linewidth]{figs/mh17_acf.pdf}
   \caption{Autocorrelation function for \textit{MH17}.}
 \end{subfigure}
 \caption{Differenced time series and autocorrelation function for \textit{MH17}. The dashed lines indicate $95 \%$ confidence intervals for IID data.}
@@ -251,7 +256,7 @@ As can be seen from the figure, we are able to retrieve expected correlations, s
 This is probably both due to the simple methods employed to compute correlations as well as that computing correlations between noisy datasets without clear features is generally a difficult problem.
 
 
-\section{Conclusion (All)}
+\section{Conclusion}
 In this project we analysed roughly six months of unfiltered twitter data by querying the tweets for a set of 100 predefined keywords. We aimed at recovering correlations between the occurrence frequencies of related keywords and showing that spurious relationships can be detected in large datasets. We used both the time series of the number of tweets per day containing a particular keyword and its differenced counterpart to compute correlation coefficients for pairs of keywords. 
 
 While we found large correlation coefficients for \textit{a priori} expected keyword pairs, we also measured a significant number of unexpected and probably spurious correlations.
@@ -265,14 +270,14 @@ This project was part of the lecture \textit{Data Science in Techno-Socio-Econom
 \bibitem{tyler_vigen}
 \url{http://tylervigen.com/spurious-correlations}
 \bibitem{webpage}\url{http://spuriousrelationships.eu.pn/}
-\bibitem{github}\url{https://github.com/cbruderer/spuriousrelations}
-\bibitem{twitter}\url{http://www.esa.int/Our_Activities/Space_Science/Rosetta}
-\bibitem{reddit}\url{http://www.esa.int/Our_Activities/Space_Science/Rosetta}
-\bibitem{facebook}\url{http://www.esa.int/Our_Activities/Space_Science/Rosetta}
+\bibitem{twitter}\url{https://twitter.com/}
+\bibitem{facebook}\url{https://www.facebook.com/}
+\bibitem{reddit}\url{https://www.reddit.com/}
 \bibitem{twitterstream}\url{https://dev.twitter.com/streaming/public}
 \bibitem{rosetta}\url{http://www.esa.int/Our_Activities/Space_Science/Rosetta}
 \bibitem{who}\url{http://www.who.int/en/}
 \bibitem{pyspark}\url{https://spark.apache.org/}
+\bibitem{github}\url{https://github.com/cbruderer/spuriousrelations}
 \bibitem{dettling14} Marcel Dettling, Applied Time Series Analysis, SS 2014, Zurich University of Applied Sciences, \url{https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf}
 \bibitem{spark}\url{http://spark.apache.org}
 \bibitem{python}\url{https://www.python.org}
