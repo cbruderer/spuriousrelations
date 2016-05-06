@@ -58,6 +58,7 @@
 							</p>
 
 							<a href="#Results" class="button scrolly">See our results</a>
+							<a href="#frequency_plot" class="button scrolly">Explore the data</a>
 							<ul class="social">
 							</ul>
 						</div>
@@ -237,7 +238,7 @@
 						<div class="row">
 							<section class="box style1">
 									<p>
-									The occurrence of different keywords over time displays different behaviour depending on the keyword. Keywords from the everyday life and family sections for example feature stationary time series with little to no variation. On the other hand, keywords associated to major events show significant trends and structure. Examples for both these cases are shown in Figures <a href="#fig2">2</a> and <a href="#fig3">3</a>.  The Figures show the absolute and relative time series for the words <i>banana</i> and <i>MH17</i>  respectively. <i>MH17</i>  is the abbreviation for the Malaysian airlines flight 17, which was shot down over the Ukraine on July, 17th 2014. We see that the mentions of <i>MH17</i>  are concentrated in this period while the word banana appears with a constant frequency over the 6 months we have analysed. Another interesting example is the word <i>apple</i> , which denotes the fruit as well as the company. We would expect the frequency of the word <i>apple</i>  to be fairly time-independent, but from the plot we see that the number of mentions features a strong peak in September, 2014. This is probably caused by apple holding its keynote speech during this period of the year. This example shows that many words can have different meanings depending on the context or language which can cause <i>a priori</i>  unexpected features in the time series. 
+									The occurrence of different keywords over time displays different behaviour depending on the keyword. Keywords from the everyday life and family sections for example feature stationary time series with little to no variation. On the other hand, keywords associated to major events show significant trends and structure. Examples for both these cases are shown in Figures <a href="#fig2">2</a> and <a href="#fig3">3</a>. Go to Figure <a href="#frequency_plot">5</a> to see the time series of all of our keywords. Figures Figures <a href="#fig2">2</a> and <a href="#fig3">3</a> show the absolute and relative time series for the words <i>banana</i> and <i>MH17</i>  respectively. <i>MH17</i>  is the abbreviation for the Malaysian airlines flight 17, which was shot down over the Ukraine on July, 17th 2014. We see that the mentions of <i>MH17</i>  are concentrated in this period while the word banana appears with a constant frequency over the 6 months we have analysed. Another interesting example is the word <i>apple</i> , which denotes the fruit as well as the company. We would expect the frequency of the word <i>apple</i>  to be fairly time-independent, but from the plot we see that the number of mentions features a strong peak in September, 2014. This is probably caused by apple holding its keynote speech during this period of the year. This example shows that many words can have different meanings depending on the context or language which can cause <i>a priori</i>  unexpected features in the time series. 
 									</p>
 									<p><h3>Fig 2: Absolute number of keyword occurrences as a function of time:</h3><p>
 									<table style="width:100%" id="fig2">
@@ -276,7 +277,7 @@
 									</table>
 
 									<p>
-										From Figures <a href="#fig2">2</a> and <a href="#fig3">3</a>, we see that in general, the time series are not stationary. We therefore transform all the time series by differencing, as outlined in Eq.~\ref{eq:diff}. The differenced time series for the keyword <i>MH17</i> are shown in Fig. <a href="#fig4">4</a> along with its autocorrelation function. We see that the differenced time series is largely stationary, even though <i>MH17</i>. is one of the most strongly varying keywords in our sample. This is confirmed by the autocorrelation function.
+										From Figures <a href="#fig2">2</a> and <a href="#fig3">3</a>, we see that in general, the time series are not stationary. We therefore transform all the time series by differencing, as outlined above. The differenced time series for the keyword <i>MH17</i> are shown in Fig. <a href="#fig4">4</a> along with its autocorrelation function. We see that the differenced time series is largely stationary, even though <i>MH17</i> is one of the most strongly varying keywords in our sample. This is confirmed by the autocorrelation function.
 									</p>
 
 									<p><h3>Fig 4: Differenced time series and autocorrelation function for <i>MH17</i>. The dashed lines indicate $95 \%$ confidence intervals for IID data:</h3><p>
@@ -290,6 +291,10 @@
 									    <td>Autocorrelation function for <i>MH17</i>.</td>
 									  </tr>
 									</table>
+
+									<p>The cross correlation coefficients between keyword pairs for both methods are shown in Figures <a href="#correlations_raw">6</a> and <a href="#correlations_diff">7</a>. As expected, we see a correlation of 1 on the diagonal, corresponding to the auto correlations. The correlation matrix has a block-diagonal form corresponding to the correlations within keyword groups, e.g. keywords within the refugees and terrorism categories. Comparing the two correlation measures, we find that the correlations computed from the differenced time series are less pronounced than the ones computed using the raw data. This is expected the latter method to generally overestimates correlations. </p>
+
+									<p>As can be seen from these figures, we are able to retrieve expected correlations, such as correlation between <i>nelson</i> and <i>mandela</i> or <i>refugees</i> and <i>syria</i>. However, we also find several unexpected and probably spurious correlations between keywords such as <i>maya</i> and <i>television</i> or <i>mandela</i> and <i>ukraine</i>. This is probably both due to the simple methods employed to compute correlations as well as that computing correlations between noisy datasets without clear features is generally a difficult problem.</p>
 
 									<h3>Here are some examples of expected and unexpected correlations and non-correlations:</h3>
 									<table style="width:100%" align="left" border='1'>
@@ -305,21 +310,21 @@
 									  </tr>
 									  <tr align="left">
 									    <td>Nelson & Mandela</td>
-									    <td>?</td>		
+									    <td>0.793</td>		
 									    <td>Climate & Banana</td>
-									    <td>?</td>
+									    <td>0.193</td>
 									  </tr>
 									  <tr align="left">
 									    <td>MH17 & Ukraine</td>
-									    <td>?</td>		
+									    <td>0.713</td>		
 									    <td>WhatsApp & Jogging</td>
-									    <td>?</td>
+									    <td>-0.175</td>
 									  </tr>
 									  <tr align="left">
 									    <td>Refugees & Syria</td>
-									    <td>?</td>		
+									    <td>-0.218</td>		
 									    <td>Wedding & Ukraine</td>
-									    <td>?</td>
+									    <td>0.658</td>
 									  </tr>
 									</table>
 									<table style="width:100%" align="left" border='1'>
@@ -334,22 +339,22 @@
 									    <td><b>Value</b></td>	
 									  </tr>
 									  <tr align="left">
-									    <td>MH370 & Swine</td>
-									    <td>?</td>		
-									    <td>Migrants & Refugees</td>
-									    <td>?</td>
+									    <td>Nelson & Pig</td>
+									    <td>0.719</td>		
+									    <td>Attack & Terrorism</td>
+									    <td>-0.186</td>
 									  </tr>
 									  <tr align="left">
-									    <td>Linux & Allah</td>
-									    <td>?</td>		
+									    <td>Maya & Flu</td>
+									    <td>0.802</td>		
 									    <td>Snowden & Russia</td>
-									    <td>?</td>
+									    <td>0.146</td>
 									  </tr>
 									  <tr align="left">
-									    <td>Vegetarian & London</td>
-									    <td>?</td>		
-									    <td>Comet & Rosetta</td>
-									    <td>?</td>
+									    <td>Isis & Rosetta</td>
+									    <td>-0.562</td>		
+									    <td>Refugees & Asylum</td>
+									    <td>-0.291</td>
 									  </tr>
 									</table>
 									
@@ -367,33 +372,39 @@
 					<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.11.1.min.js"></script>
 				</header>
 					
-				<div class="container">
+				<div class="container" align="center">
+					<h3>Fig 5: Interactive figure showing the mean subtracted number of keyword occurrences as a function of time normalized by the standard deviation:</h3>
+					<p>Choose two keywords to see their time series, hover over the red points to see when major world events happened and use the tools at the top right to zoom.</p>
 					<div class="plotdiv" id="7f786d23-563e-413a-ab53-e35116feaa13"></div>
 					<script type="text/javascript" src="frequency_plot.js"></script>
 				</div>
 			</article>
  
-			<article id="correlations_plot">
+			<article id="correlations_raw">
 				<header>
 					<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.11.1.min.css" type="text/css" />
 					<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.11.1.min.css" type="text/css" />
 					<script src="https://cdn.pydata.org/bokeh/release/bokeh-0.11.1.min.js"></script>
 					<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.11.1.min.js"></script>
 				</header>
-				<div class="container">
+				<div class="container" align="center">
+					<h3>Fig 6: Interactive figure showing the correlation coefficients between keyword pairs computed from the raw time series:</h3>
+					<p>Hover over the plot to see the measured values, use the tools at the top right to zoom.</p>
 					<div class="plotdiv" id="43dad00a-2ebd-4a05-9260-32cad621663c"></div>
 					<script type="text/javascript" src="correlations_raw.js"></script>
 				</div>
 			</article>
 
-			<article id="correlations_plot">
+			<article id="correlations_diff">
 				<header>
 					<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.11.1.min.css" type="text/css" />
 					<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.11.1.min.css" type="text/css" />
 					<script src="https://cdn.pydata.org/bokeh/release/bokeh-0.11.1.min.js"></script>
 					<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.11.1.min.js"></script>
 				</header>
-				<div class="container">
+				<div class="container" align="center">
+					<h3>Fig 7: Interactive figure showing the correlation coefficients between keyword pairs computed from the differenced time series:</h3>
+					<p>Hover over the plot to see the measured values, use the tools at the top right to zoom.</p>
 					<div class="plotdiv" id="efe437c4-a27b-4600-9318-b1cb3ac2afd2"></div>
 					<script type="text/javascript" src="correlations_diff.js"></script>
 				</div>
