@@ -34,22 +34,30 @@
 \maketitle
 
 \begin{abstract}
-... Claudio ...\\
-include link to website
+................................
+
+Our results are hosted here http://spuriousrelationships.eu.pn/
+
+
+All our used for this analysis is public and can be found here:
+
+https://github.com/cbruderer/spuriousrelations/
 \end{abstract}
 
 
 \vspace{0.2in}
 
-\section{Introduction (Anna)}
+\section{Introduction}
 We have entered the era of Big Data and the wealth of information available to us entails its own new challenges. Relationships between quantities, whether real or without any obvious causal link, will naturally arise if the data sets are large enough (for examples see \cite{tyler_vigen}). Even though we might be inclined to interpret apparent links between measurements, a correlation does not imply causation. One needs to find a way to distinguish spurious relationships between measurements from those with a causal link, and quantify the frequency of chance correlations occurring.
 
 Based on a list of pre-defined keywords and Twitter data, we aim to show that relationships between quantities without any obvious causal link can be identified in large data sets. 
 We use a Twitter dataset which contains unfiltered tweets between May 2014 - July 2014 and September 2014 - December 2014. For each day, we determine the number of tweets containing one of our pre-defined keywords. We then measure and quantify the time-correlation functions between the popularity of various keywords. To test our method we recover and quantify expected correlations between synonyms or related keywords. We  additionally investigate and discuss the performance of different correlation measures.
 
 \section{Data}
-\subsection{Dataset}
-In order to identify relationships between words, we need a suitable data set containing a large amount of text data and covering an extended period of time. Data from all major social media platforms primarily using text as a medium (e.g. Twitter \cite{twitter}, Facebook \cite{facebook}, and Reddit \cite{reddit}) satisfy these conditions. As 
+\subsection{Data set}
+In order to identify relationships between words, we need a suitable data set containing a large amount of text data and covering an extended period of time. Data from all major social media platforms primarily using text as a medium (e.g. Twitter \cite{twitter}, Facebook \cite{facebook}, and Reddit \cite{reddit}) satisfy these conditions.
+
+We decided to apply our analysis on Twitter data, which has been previously gathered by an ETH research group. This data set was created via the public Twitter stream \cite{twitterstream}, which downloads 1\% of the tweets posted at that moment without applying any further filtering, and covers the years 2012-2014. We analyse a subset of the whole data set, which contains data of the months May, 2014 - July, 2014 and September, 2014 - December, 2014. These data have been converted to Parquet files, thus simplyfing reading in the data.
 
 \subsection{Keyword selection}
 \begin{center}
@@ -93,7 +101,7 @@ In order to identify relationships between words, we need a suitable data set co
     \hline
     \end{tabular}
   \end{adjustbox}
-  \caption{Table 2.1 - Table listing all the keywords used in our analysis and how they are grouped by topic.}
+  \caption{Table 2.2: Table listing all the keywords used in our analysis and how they are grouped by topic.}
 \end{center}
 
 In our analysis we select one hundred keywords. All these keywords are listed in Table~\ref{tab:keywords}.
@@ -105,12 +113,21 @@ These selection criteria were chosen to address various problems. First, by pick
 We note however that there are caveats in this type of analysis. Many words have different meanings and could thus potentially correlate or not correlate with other words depending on which meaning is more common. As an example, we include `who` in our analysis. While it is primarily used as a pronoun, it is also the abbreviation of the World Health Organization \cite{who}. Due to the Ebola outbreak in Western Africa in 2014, we expect this secondary meaning to modulate the number of mentions over time, and potentially display correlations with related words (e.g. `ebola`). Other examples of words with multiple meanings include `right` (opposite of wrong; political perspective; direction) and `left` (past participle of leave; political perspective; direction).
 
 \subsection{Data analysis}
-... Describe how we reduce Twitter data with pyspark ...
+We use the \textsc{Python} front end of Apache \textsc{Spark}\cite{pyspark} called \textsc{pyspark} to analyse the twitter data. The data set is read in and then filtered to contain only non-empty tweets. As a next step, the timestamp is adjusted to be in a more accessible format, which encodes only the day of the year and the year, and the tweets are split up into individual words and converted to be only lowercase. For all words we compute jointly the number of mentions per day. As a last step, we filter to only recover the statistics for our keywords, where we also take the keywords into account if they are used as a hashtags, and save the results.
 
+\subsection{Data completeness}
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{figs/incomplete_data.pdf}
+\caption{Histogram of the occurences of specific indices, which correspond to individual days, for which the number of mentions of a keyword is below the average minus the standard deviation for this keyword. The threshold is set at 20.}
+\label{fig:incomplete}
+\end{figure}
 
-\section{Time series analysis (Andrina)}
-... Correlation measures, k-means clustering, binning/smoothing ...
+The streaming of Twitter data was interrupted several times during the period the data were collected. Thus, minutes, hours, or even days are missing. While missing days are trivial to identify, doing so for partly incomplete daily data is more complicated. These days however would induce systematic biases to the analysis, as for all keywords the number of mentions decreases at the same time, thus inducing a strong correlation in otherwise potentially uncorrelated data.
 
+All our analysis codes can be found on this public \textsc{GitHub} repository \cite{github}.
+
+\section{Time series analysis}
 The main results of the data reduction explained in the previous section, are time series of the occurrence of each of the 100 keywords in the queried twitter dataset. In order to identify relationships between different keywords, we compare their occurrence frequencies using three different methods based on the Pearson correlation coefficient and k means clustering. 
 
 \subsection{Correlation between stationary time series}
@@ -153,12 +170,12 @@ For non stationary time series, we can thus first perform differencing and then 
 
 In order to quantify the significance of both the auto- and cross correlations, we need to compare the measured values to the expected values for uncorrelated time series. For uncorrelated time series, which are a sequence of IID variables we expect both for the auto and cross correlations $\rho(\Delta t) = 0$ with a variance of $\sigma^{2}(\rho(\Delta t)) = \frac{1}{n}$, where $n$ denotes the number of samples used to estimate the correlation \cite{dettling14}. For simplicity, we will call a cross-correlation between two time series significant if its value exceeds $1.96 \sigma(\rho(\Delta t))$ (i.e. the $95 \%$ confidence limits), even though we do not expect the differenced time series to be perfect IID processes. 
 
-\subsection{Missing data}
+\subsection{Missing data}\label{sec:missingdata}
 The above considerations assume that there is no missing time series data, which is rarely the case in reality. Several pieces of data are missing in the twitter dataset. First of all we do not have access to data for most of August 2014 and furthermore there are several days missing thoughout. In order to be able to analyse the data, we therefore fill the missing values using random samples drawn from a normal distribution with the mean and variance of the respective time series. This procedure will keep mean and standard deviation constant and will not introduce any correlations between different time series.
 
 In order to find relations between keywords, we will proceed in two steps: for illustration purposes we will compute the cross correlation between all the time series (filled as explained above) regardless of stationarity for timelags $-10 \leq \Delta t \leq 10$. We will then compute the autocorrelation function of all the series and recompute the correlation coefficients using the differenced time series for non stationary processes. For both methods, we assign the highest correlation coefficient (regardless of timelag $\Delta t$) to each pair and compare the results obtained with these two measures. 
 
-\section{Results (Anna, Andrina)}
+\section{Results}
 The occurrence of different keywords over time displays different behaviour depending on the keyword. Keywords from the everyday life and family sections for example feature stationary time series with little to no variation. On the other hand, keywords associated to major events show significant trends and structure. Examples for both these cases are shown in Figures \ref{fig:timeseries_abs} and \ref{fig:timeseries_rel}.  The Figures show the absolute and relative time series for the words \textit{banana} and \textit{MH17} respectively. \textit{MH17} is the abbreviation for the Malaysian airlines flight 17, which was shot down over the Ukraine on July, 17th 2014. We see that the mentions of \textit{MH17} are concentrated in this period while the word banana appears with a constant frequency over the 6 months we have analysed. Another interesting example is the word \textit{apple}, which denotes the fruit as well as the company. We would expect the frequency of the word \textit{apple} to be fairly time-independent, but from the plot we see that the number of mentions features a strong peak in September, 2014. This is probably caused by apple holding its keynote speech during this period of the year. This example shows that many words can have different meanings depending on the context or language which can cause \textit{a priori} unexpected features in the time series. 
 
 \begin{figure}
@@ -167,19 +184,19 @@ The occurrence of different keywords over time displays different behaviour depe
   \centering
   \includegraphics[width=.7\linewidth]{figs/banana_absolute.pdf}
   \caption{Occurrence frequency for \textit{banana}.}
-  \label{fig:sub1}
+  \label{fig:sub11}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.7\linewidth]{figs/mh17_absolute.pdf}
   \caption{Occurrence frequency for \textit{MH17}.}
-  \label{fig:sub2}
+  \label{fig:sub12}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.7\linewidth]{figs/apple_absolute.pdf}
   \caption{Occurrence frequency for \textit{apple}.}
-  \label{fig:sub2}
+  \label{fig:sub13}
 \end{subfigure}
 \caption{Absolute number of keyword occurrences as a function of time.}
 \label{fig:timeseries_abs}
@@ -191,19 +208,19 @@ The occurrence of different keywords over time displays different behaviour depe
   \centering
   \includegraphics[width=.7\linewidth]{figs/banana.pdf}
   \caption{Occurrence frequency for \textit{banana}.}
-  \label{fig:sub1}
+  \label{fig:sub21}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.7\linewidth]{figs/mh17.pdf}
   \caption{Occurrence frequency for \textit{MH17}.}
-  \label{fig:sub2}
+  \label{fig:sub22}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.7\linewidth]{figs/apple.pdf}
   \caption{Occurrence frequency for \textit{apple}.}
-  \label{fig:sub2}
+  \label{fig:sub23}
 \end{subfigure}
 \caption{Mean subtracted number of keyword occurrences as a function of time normalised by the standard deviation of the time series.}
 \label{fig:timeseries_rel}
@@ -246,11 +263,15 @@ This project was part of the lecture \textit{Data Science in Techno-Socio-Econom
 
 \bibitem{tyler_vigen}
 \url{http://tylervigen.com/spurious-correlations}
+\bibitem{webpage}\url{http://spuriousrelationships.eu.pn/}
+\bibitem{github}\url{https://github.com/cbruderer/spuriousrelations}
 \bibitem{twitter}\url{http://www.esa.int/Our_Activities/Space_Science/Rosetta}
 \bibitem{reddit}\url{http://www.esa.int/Our_Activities/Space_Science/Rosetta}
 \bibitem{facebook}\url{http://www.esa.int/Our_Activities/Space_Science/Rosetta}
+\bibitem{twitterstream}\url{https://dev.twitter.com/streaming/public}
 \bibitem{rosetta}\url{http://www.esa.int/Our_Activities/Space_Science/Rosetta}
 \bibitem{who}\url{http://www.who.int/en/}
+\bibitem{pyspark}\url{https://spark.apache.org/}
 \bibitem{dettling14} Marcel Dettling, Applied Time Series Analysis, SS 2014, Zurich University of Applied Sciences, \url{https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf}
 \bibitem{spark}\url{http://spark.apache.org}
 \bibitem{python}\url{https://www.python.org}
