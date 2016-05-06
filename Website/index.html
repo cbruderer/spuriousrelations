@@ -54,7 +54,7 @@
 							
 							<p><h6>Claudio Bruderer, Andrina Nicola, Anna Weigel</h6></p>
 
-							<p>Nice tagline, ideas?
+							<p>For our search of spurious relationships within Big Data, we used a set of unfiltered tweets covering a time period of six months and a list of pre-defined keywords. Here, we present the details of our analysis and our results.
 							</p>
 
 							<a href="#Results" class="button scrolly">See our results</a>
@@ -69,7 +69,7 @@
 			<div class="wrapper style2">
 				<article id="Introduction">
 					<header>
-						<h2>Introduction</h2>
+						<h1>Introduction</h1>
 						<!--<p>Odio turpis amet sed consequat eget posuere consequat.</p>-->
 					</header>
 					<div class="container">
@@ -94,17 +94,18 @@
 			<div class="wrapper style2">
 				<article id="Data">
 					<header>
-						<h2>Data</h2>
+						<h1>Data</h1>
 					</header>
 					<div class="container">
 						<div class="row">
 							<section class="box style1">
-								<p>The main results of the data reduction explained in the previous section, are time series of the occurence of each of the 100 keywords in the queried twitter dataset. In order to identify relationships between different keywords, we compare their occurence frequencies using three different methods based on the Pearson correlation coefficient and k means clustering.
-								</p>
-								<header>
-								<h3>Keywords</h3>
-								<p>Our list of keywords used in our analysis and how they are grouped by topic: </p>
-								</header>
+								<h3>Data set</h3>
+								<p>In order to identify relationships between words, we need a suitable data set containing a large amount of text data and covering an extended period of time. Data from all major social media platforms primarily using text as a medium (e.g. <a href="http://www.esa.int/Our_Activities/Space_Science/Rosetta">Twitter</a>, <a href="http://www.esa.int/Our_Activities/Space_Science/Rosetta">Facebook</a>, and Reddit \cite{reddit}) satisfy these conditions.</p>
+
+								<p>We decided to apply our analysis on Twitter data, which has been previously gathered by an ETH research group. This data set was created via the public <a href="https://dev.twitter.com/streaming/public">Twitter Stream</a>, which downloads $1\%$ of the tweets posted at that moment without applying any further filtering, and covers the years 2012-2014. We analyse a subset of the whole data set, which contains data of the months May, 2014 - July, 2014 and September, 2014 - December, 2014. These data have been converted to Parquet files, thus simplyfing reading in the data.</p>
+
+								<h3>Keyword Selection</h3>
+								<p>In our analysis we select one hundred keywords. All these keywords are listed in below:</p>
 								<section align="left">
 									<p><b>Terrorism / Religion:</b> isis, terrorism, arab, spring, attack, god, christian, allah, islam</p>
 									<p><b>Refugees:</b> syria, refugees, migrants, africa, italy, ethiopia, asylum, unhcr, immigration, foreigners</p>
@@ -121,6 +122,29 @@
 									<p><b>Family:</b> family, divorce, marriage, wedding, holidays</p>
 									<p><b>Everyday life:</b> homework, television, coffee, tea, school, work, teacher, sports, jogging, marathon</p>
 								</section>
+
+								<p>To choose these keywords, we applied different criteria. First, we identified major events that happened during the period for which we have access to twitter data (May 2014 - July 2014 and September 2014 - December 2014). For these topics, we then selected related words, on purpose also including synonyms. Besides these <i>major events categories</i> we also chose words related to long-term trends we <i>it a priori</i> expect to find in the data (e.g. <i>Food / Trends</i>, <i>Refugees</i>, <i>Politics</i>). Furthermore, we include a group of keywords on <i>Everyday life</i> for which we <i>it a priori</i> do not expect to see strong trends.</p>
+
+								<p>These selection criteria were chosen to address various problems. First, by picking words related to major events localized in time (e.g.  <a href="http://www.esa.int/Our_Activities/Space_Science/Rosetta">Rosetta satellite dispatching Philae lander</a>), we are able to test our pipeline and assert that this <i>it a priori</i> expected quick rise in mentions on social media platforms is identified in our data as well. Second, by including several synonyms, it is reasonable to expect certain correlations between the keywords, hence allowing us to validate our analysis in a second, independent way. Third, the keywords for which we do not <i>it a priori</i> expect the number of mentions to display a significant structure over time (e.g. <i>Everyday life</i>), should only weakly correlate with other keywords displaying more structure.</p>
+
+								<p>We note however that there are caveats in this type of analysis. Many words have different meanings and could thus potentially correlate or not correlate with other words depending on which meaning is more common. As an example, we include <i>who</i> in our analysis. While it is primarily used as a pronoun, it is also the abbreviation of the World Health Organization <a href="http://www.who.int/en/">WHO</a>. Due to the Ebola outbreak in Western Africa in 2014, we expect this secondary meaning to modulate the number of mentions over time, and potentially display correlations with related words (e.g. <i>ebola</i>). Other examples of words with multiple meanings include <i>right</i> (opposite of wrong; political perspective; direction) and <i>left</i> (past participle of leave; political perspective; direction).</p>
+
+								<h3>Data analysis</h3>
+								<p>We use the <a href="https://www.python.org">Python</a> front end of <a href="http://spark.apache.org">Apache Spark</a> called <b>pyspark</b> to analyse the twitter data. The data set is read in and then filtered to contain only non-empty tweets. As a next step, the timestamp is adjusted to be in a more accessible format, which encodes only the day of the year and the year, and the tweets are split up into individual words and converted to be only lowercase. For all words we compute jointly the number of mentions per day. As a last step, we filter to only recover the statistics for our keywords, where we also take the keywords into account if they are used as a hashtags, and save the results.</p>
+
+								<h3>Data completeness</h3>
+								<p>The streaming of Twitter data was interrupted several times during the period the data were collected. Thus, minutes, hours, or even days are missing. While missing days are trivial to identify, doing so for partly incomplete daily data is more complicated. These days however would induce systematic biases to the analysis, as for all keywords the number of mentions decreases at the same time, thus inducing a strong correlation in otherwise potentially uncorrelated data.</p>
+
+								<table style="width:100%" id="fig1">
+								  <tr>
+								    <td><img src="images/incomplete_data.pdf" alt="incomplete_data"></td>
+								  </tr>
+								  <tr>
+								    <td>Histogram of the occurences of specific indices, which correspond to individual days, for which the number of mentions of a keyword is below the average minus the standard deviation for this keyword. The threshold is set at 20.</td>
+								  </tr>
+								</table>
+
+
 							</section>
 						</div>
 					</div>
@@ -131,7 +155,7 @@
 			<div class="wrapper style2">
 				<article id="Time">
 					<header>
-						<h2>Time Series Analysis</h2>
+						<h1>Time Series Analysis</h1>
 					</header>
 					<div class="container">
 						<div class="row">
@@ -207,79 +231,133 @@
 			<div class="wrapper style2">
 				<article id="Results">
 					<header>
-						<h2>Results</h2>
-						<p>Odio turpis amet sed consequat eget posuere consequat.</p>
+						<h1>Results</h1>
 					</header>
 					<div class="container">
 						<div class="row">
 							<section class="box style1">
-								<h3>Here are some examples of expected and unexpected correlations and non-correlations:</h3>
-								<table style="width:100%" align="left" border='1'>
-								  <tr>
-								    <th colspan='2'><h4>Expected Correlation</h4></th>
-								    <th colspan='2'><h4>Expected Non-correlation</h4></th>	
-								  </tr>
-								  <tr align="left">
-								    <td><b>Keywords</b></td>
-								    <td><b>Value</b></td>	
-								    <td><b>Keywords</b></td>
-								    <td><b>Value</b></td>	
-								  </tr>
-								  <tr align="left">
-								    <td>Nelson & Mandela</td>
-								    <td>?</td>		
-								    <td>Climate & Banana</td>
-								    <td>?</td>
-								  </tr>
-								  <tr align="left">
-								    <td>MH17 & Ukraine</td>
-								    <td>?</td>		
-								    <td>WhatsApp & Jogging</td>
-								    <td>?</td>
-								  </tr>
-								  <tr align="left">
-								    <td>Refugees & Syria</td>
-								    <td>?</td>		
-								    <td>Wedding & Ukraine</td>
-								    <td>?</td>
-								  </tr>
-								</table>
-								<table style="width:100%" align="left" border='1'>
-								  <tr>	
-								    <th colspan='2'><h4>Unexpected Correlation</h4></th>
-								    <th colspan='2'><h4>Unexpected Non-correlation</h4></th>
-								  </tr>
-								  <tr align="left">
-								    <td><b>Keywords</b></td>
-								    <td><b>Value</b></td>	
-								    <td><b>Keywords</b></td>
-								    <td><b>Value</b></td>	
-								  </tr>
-								  <tr align="left">
-								    <td>MH370 & Swine</td>
-								    <td>?</td>		
-								    <td>Migrants & Refugees</td>
-								    <td>?</td>
-								  </tr>
-								  <tr align="left">
-								    <td>Linux & Allah</td>
-								    <td>?</td>		
-								    <td>Snowden & Russia</td>
-								    <td>?</td>
-								  </tr>
-								  <tr align="left">
-								    <td>Vegetarian & London</td>
-								    <td>?</td>		
-								    <td>Comet & Rosetta</td>
-								    <td>?</td>
-								  </tr>
-								</table>
+									<p>
+									The occurrence of different keywords over time displays different behaviour depending on the keyword. Keywords from the everyday life and family sections for example feature stationary time series with little to no variation. On the other hand, keywords associated to major events show significant trends and structure. Examples for both these cases are shown in Figures <a href="#fig2">2</a> and <a href="#fig3">3</a>.  The Figures show the absolute and relative time series for the words <i>banana</i> and <i>MH17</i>  respectively. <i>MH17</i>  is the abbreviation for the Malaysian airlines flight 17, which was shot down over the Ukraine on July, 17th 2014. We see that the mentions of <i>MH17</i>  are concentrated in this period while the word banana appears with a constant frequency over the 6 months we have analysed. Another interesting example is the word <i>apple</i> , which denotes the fruit as well as the company. We would expect the frequency of the word <i>apple</i>  to be fairly time-independent, but from the plot we see that the number of mentions features a strong peak in September, 2014. This is probably caused by apple holding its keynote speech during this period of the year. This example shows that many words can have different meanings depending on the context or language which can cause <i>a priori</i>  unexpected features in the time series. 
+									</p>
+									<p><h3>Fig 2: Absolute number of keyword occurrences as a function of time:</h3><p>
+									<table style="width:100%" id="fig2">
+									  <tr>
+									    <td><img src="images/banana_absolute.pdf" alt="banana_absolute"></td>
+									    <td><img src="images/mh17_absolute.pdf" alt="mh17_absolute"></td>
+									  </tr>
+									  <tr>
+									    <td>Occurrence frequency for <i>banana</i>.</td>
+									    <td>Occurrence frequency for <i>MH17</i>.</td>
+									  </tr>
+									  <tr>
+									    <td  colspan='2'><img src="images/apple_absolute.pdf" alt="apple_absolute"></td>
+									  </tr>
+									  <tr>
+									    <td  colspan='2'>Occurrence frequency for <i>apple</i>.</td>
+									  </tr>
+									</table>
+
+									<p><h3>Fig 3: Mean subtracted number of keyword occurrences as a function of time normalised by the standard deviation of the time series:</h3><p>
+									<table style="width:100%" id="fig3">
+									  <tr>
+									    <td><img src="images/banana.pdf" alt="banana"></td>
+									    <td><img src="images/mh17.pdf" alt="mh17"></td>
+									  </tr>
+									  <tr>
+									    <td>Occurrence frequency for <i>banana</i>.</td>
+									    <td>Occurrence frequency for <i>MH17</i>.</td>
+									  </tr>
+									  <tr>
+									    <td  colspan='2'><img src="images/apple.pdf" alt="apple"></td>
+									  </tr>
+									  <tr>
+									    <td  colspan='2'>Occurrence frequency for <i>apple</i>.</td>
+									  </tr>
+									</table>
+
+									<p>
+										From Figures <a href="#fig2">2</a> and <a href="#fig3">3</a>, we see that in general, the time series are not stationary. We therefore transform all the time series by differencing, as outlined in Eq.~\ref{eq:diff}. The differenced time series for the keyword <i>MH17</i> are shown in Fig. <a href="#fig4">4</a> along with its autocorrelation function. We see that the differenced time series is largely stationary, even though <i>MH17</i>. is one of the most strongly varying keywords in our sample. This is confirmed by the autocorrelation function.
+									</p>
+
+									<p><h3>Fig 4: Differenced time series and autocorrelation function for <i>MH17</i>. The dashed lines indicate $95 \%$ confidence intervals for IID data:</h3><p>
+									<table style="width:100%" id="fig4">
+									  <tr>
+									    <td><img src="images/mh17_diff.pdf" alt="mh17_diff"></td>
+									    <td><img src="images/mh17_acf.pdf" alt="mh17_acf"></td>
+									  </tr>
+									  <tr>
+									    <td>Differenced time series for <i>MH17</i>.</td>
+									    <td>Autocorrelation function for <i>MH17</i>.</td>
+									  </tr>
+									</table>
+
+									<h3>Here are some examples of expected and unexpected correlations and non-correlations:</h3>
+									<table style="width:100%" align="left" border='1'>
+									  <tr>
+									    <th colspan='2'><h4>Expected Correlation</h4></th>
+									    <th colspan='2'><h4>Expected Non-correlation</h4></th>	
+									  </tr>
+									  <tr align="left">
+									    <td><b>Keywords</b></td>
+									    <td><b>Value</b></td>	
+									    <td><b>Keywords</b></td>
+									    <td><b>Value</b></td>	
+									  </tr>
+									  <tr align="left">
+									    <td>Nelson & Mandela</td>
+									    <td>?</td>		
+									    <td>Climate & Banana</td>
+									    <td>?</td>
+									  </tr>
+									  <tr align="left">
+									    <td>MH17 & Ukraine</td>
+									    <td>?</td>		
+									    <td>WhatsApp & Jogging</td>
+									    <td>?</td>
+									  </tr>
+									  <tr align="left">
+									    <td>Refugees & Syria</td>
+									    <td>?</td>		
+									    <td>Wedding & Ukraine</td>
+									    <td>?</td>
+									  </tr>
+									</table>
+									<table style="width:100%" align="left" border='1'>
+									  <tr>	
+									    <th colspan='2'><h4>Unexpected Correlation</h4></th>
+									    <th colspan='2'><h4>Unexpected Non-correlation</h4></th>
+									  </tr>
+									  <tr align="left">
+									    <td><b>Keywords</b></td>
+									    <td><b>Value</b></td>	
+									    <td><b>Keywords</b></td>
+									    <td><b>Value</b></td>	
+									  </tr>
+									  <tr align="left">
+									    <td>MH370 & Swine</td>
+									    <td>?</td>		
+									    <td>Migrants & Refugees</td>
+									    <td>?</td>
+									  </tr>
+									  <tr align="left">
+									    <td>Linux & Allah</td>
+									    <td>?</td>		
+									    <td>Snowden & Russia</td>
+									    <td>?</td>
+									  </tr>
+									  <tr align="left">
+									    <td>Vegetarian & London</td>
+									    <td>?</td>		
+									    <td>Comet & Rosetta</td>
+									    <td>?</td>
+									  </tr>
+									</table>
+									
 							</section>
 						</div>
 					</div>
 				</article>
 			</div>
-			
 
 			<article id="frequency_plot">
 				<header>
@@ -323,12 +401,26 @@
 
 
 		<!-- Conclusion -->
+		<!-- Time Series Analysis -->
 			<div class="wrapper style2">
 				<article id="Conclusion">
 					<header>
-						<h2>Conclusion</h2>
-						<p>Odio turpis amet sed consequat eget posuere consequat.</p>
+						<h1>Conclusion</h1>
 					</header>
+					<div class="container">
+						<div class="row">
+							<section class="box style1">
+								<p>
+								In this project we analysed roughly six months of unfiltered twitter data by querying the tweets for a set of 100 predefined keywords. We aimed at recovering correlations between the occurrence frequencies of related keywords and showing that spurious relationships can be detected in large datasets. We used both the time series of the number of tweets per day containing a particular keyword and its differenced counterpart to compute correlation coefficients for pairs of keywords. 
+								</p>
+
+								<p>
+								While we found large correlation coefficients for <i>a priori</i> expected keyword pairs, we also measured a significant number of unexpected and probably spurious correlations.	
+								</p>
+
+							</section>
+						</div>
+					</div>
 				</article>
 			</div>
 
