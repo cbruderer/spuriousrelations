@@ -105,7 +105,7 @@
 								<h3>Keywords</h3>
 								<p>Our list of keywords used in our analysis and how they are grouped by topic: </p>
 								</header>
-								<section>
+								<section align="left">
 									<p><b>Terrorism / Religion:</b> isis, terrorism, arab, spring, attack, god, christian, allah, islam</p>
 									<p><b>Refugees:</b> syria, refugees, migrants, africa, italy, ethiopia, asylum, unhcr, immigration, foreigners</p>
 									<p><b>Ebola:</b> ebola, guinea, sierra, leone, liberia, virus, epidemic, vaccine, who</p>
@@ -139,11 +139,11 @@
 								<p>The main results of the data reduction explained in the previous section, are time series of the occurrence of each of the 100 keywords in the queried twitter dataset. In order to identify relationships between different keywords, we compare their occurrence frequencies using three different methods based on the Pearson correlation coefficient and k means clustering.</p>
 
 								<h3>Correlation between stationary time series</h3>
-								<p>We can determine the amount of linear dependence between two time series $X_{i}$ and $X_{j}$ using the correlation coefficient $\rho$. The correlation $\rho(\Delta t)$ between two time series is a function of the time lag $\Delta t$ between the two and is defined as \cite{dettling14}
+								<p>We can determine the amount of linear dependence between two time series $X_{i}$ and $X_{j}$ using the correlation coefficient $\rho$. The correlation $\rho(\Delta t)$ between two time series is a function of the time lag $\Delta t$ between the two and is defined as (<a href="https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf">Marcel Dettling, Applied Time Series Analysis, SS 2014, Zurich University of Applied Sciences</a>)
 								\begin{equation}
 								\rho_{ij}(\Delta t) = \langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle, \label{eq:corrcoef}
 								\end{equation} 
-								where $\langle ... \rangle$ denotes the ensemble average. For $\Delta t = 0$ we recover the usual correlation coefficient, whereas for $\Delta t \neq 0$, $\rho_{ij}(\Delta t)$ quantifies the amount of linear dependence between shifted time series. If the two time series are equal i.e. $i = j$, then we recover the autocorrelation function of the time series, which quantifies the amount of linear dependence in the time series itself. In order to compare the correlation between different time series, it is customary to normalise Eq.~\ref{eq:corrcoef} by the variance of the two time series i.e. \cite{dettling14}
+								where $\langle ... \rangle$ denotes the ensemble average. For $\Delta t = 0$ we recover the usual correlation coefficient, whereas for $\Delta t \neq 0$, $\rho_{ij}(\Delta t)$ quantifies the amount of linear dependence between shifted time series. If the two time series are equal i.e. $i = j$, then we recover the autocorrelation function of the time series, which quantifies the amount of linear dependence in the time series itself. In order to compare the correlation between different time series, it is customary to normalise Eq.~\ref{eq:corrcoef} by the variance of the two time series i.e. (<a href="https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf">Marcel Dettling, Applied Time Series Analysis</a>)
 								\begin{equation}
 								\rho_{ij}(\Delta t) = \frac{\langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{j, t}-\bar{X}_{j}) (X_{j, t}-\bar{X}_{j}) \rangle}}. \label{eq:corrcoef1}
 								\end{equation}
@@ -156,7 +156,7 @@
 								\sigma^{2} &=  \langle (X_{i, t}-\bar{X})^{2} \rangle \\
 								\rho_{ii}(\Delta t) &= \frac{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t+\Delta t}-\bar{X}_{i}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{i, t+\Delta t}-\bar{X}_{i}) (X_{i, t+\Delta t}-\bar{X}_{i}) \rangle}}. 
 								\end{align} 
-								Only in this case, can we replace the ensemble averages in Equations \ref{eq:corrcoef} and \ref{eq:corrcoef1} with the sample means. This leads to the following estimators for the auto and cross correlation functions \cite{dettling14}:
+								Only in this case, can we replace the ensemble averages in Equations \ref{eq:corrcoef} and \ref{eq:corrcoef1} with the sample means. This leads to the following estimators for the auto and cross correlation functions (<a href="https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf">Marcel Dettling, Applied Time Series Analysis</a>):
 								\begin{align}
 								\rho_{ii}(\Delta t) &= \frac{\sum_{t=1}^{n-\Delta t} (X_{i, t}-\bar{X}_{i}) (X_{i, t+\Delta t}-\bar{X}_{i})}{\sum_{t=1}^{n} (X_{i, t}-\bar{X}_{i})^{2}} \\
 								\rho_{ij}(\Delta t) &= \frac{\sum_{t=1}^{n-\Delta t} (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j})}{\sqrt{\sum_{t=1}^{n} (X_{i, t}-\bar{X}_{i})^{2}\sum_{t=1}^{n} (X_{j, t}-\bar{X}_{j})^{2}}}.
@@ -169,11 +169,11 @@
 								</p>
 
 								<p>
-								In order to be able to quantify the correlation between non stationary time series we need to make the series stationary prior to evaluating Equations \ref{eq:corrcoef} and \ref{eq:corrcoef1}. The most basic form is called differencing, which allows us to transform time series with a slow trend to stationary series. A time series with a trend can be written as \cite{dettling14}
+								In order to be able to quantify the correlation between non stationary time series we need to make the series stationary prior to evaluating Equations \ref{eq:corrcoef} and \ref{eq:corrcoef1}. The most basic form is called differencing, which allows us to transform time series with a slow trend to stationary series. A time series with a trend can be written as (<a href="https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf">Marcel Dettling, Applied Time Series Analysis</a>)
 								\begin{equation}
 								X_{i, t} = T_{i, t} + R_{i, t},
 								\end{equation} 
-								where $T_{i, t}$ denotes the time series' trend and $R_{i, t}$ are random fluctuations around this trend. These fluctuations $R_{i, t}$ are generally correlated random variables with mean zero. If the time series varies slowly, we can remove the trend by considering the differenced time series instead of the initial one. The differenced time series is defined as \cite{dettling14}
+								where $T_{i, t}$ denotes the time series' trend and $R_{i, t}$ are random fluctuations around this trend. These fluctuations $R_{i, t}$ are generally correlated random variables with mean zero. If the time series varies slowly, we can remove the trend by considering the differenced time series instead of the initial one. The differenced time series is defined as (<a href="https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf">Marcel Dettling, Applied Time Series Analysis</a>)
 								\begin{equation}
 								D_{i, t} = X_{i, t+1}- X_{i, t}.
 								\end{equation} 
@@ -185,7 +185,7 @@
 								</p>
 
 								<p>
-								In order to quantify the significance of both the auto- and cross correlations, we need to compare the measured values to the expected values for uncorrelated time series. For uncorrelated time series, which are a sequence of IID variables we expect both for the auto and cross correlations $\rho(\Delta t) = 0$ with a variance of $\sigma^{2}(\rho(\Delta t)) = \frac{1}{n}$, where $n$ denotes the number of samples used to estimate the correlation \cite{dettling14}. For simplicity, we will call a cross-correlation between two time series significant if its value exceeds $1.96 \sigma(\rho(\Delta t))$ (i.e. the $95 \%$ confidence limits), even though we do not expect the differenced time series to be perfect IID processes. 
+								In order to quantify the significance of both the auto- and cross correlations, we need to compare the measured values to the expected values for uncorrelated time series. For uncorrelated time series, which are a sequence of IID variables we expect both for the auto and cross correlations $\rho(\Delta t) = 0$ with a variance of $\sigma^{2}(\rho(\Delta t)) = \frac{1}{n}$, where $n$ denotes the number of samples used to estimate the correlation (<a href="https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf">Marcel Dettling, Applied Time Series Analysis</a>). For simplicity, we will call a cross-correlation between two time series significant if its value exceeds $1.96 \sigma(\rho(\Delta t))$ (i.e. the $95 \%$ confidence limits), even though we do not expect the differenced time series to be perfect IID processes. 
 								</p>
 
 								<h3>Missing data</h3>
@@ -194,7 +194,7 @@
 								</p>
 
 								<p>
-								In order to find relations between keywords, we will proceed in two steps: for illustration purposes we will compute the cross correlation between all the time series (filled as explained above) regardless of stationarity. We will then compute the autocorrelation function of all the series and recompute the correlation coefficient using the differenced time series for non stationary processes and compare theses two measures. 
+								In order to find relations between keywords, we will proceed in two steps: for illustration purposes we will compute the cross correlation between all the time series (filled as explained above) regardless of stationarity for timelags $-10 \leq \Delta t \leq 10$. We will then compute the autocorrelation function of all the series and recompute the correlation coefficients using the differenced time series for non stationary processes. For both methods, we assign the highest correlation coefficient (regardless of timelag $\Delta t$) to each pair and compare the results obtained with these two measures.
 								</p>
 
 							</section>
@@ -210,8 +210,76 @@
 						<h2>Results</h2>
 						<p>Odio turpis amet sed consequat eget posuere consequat.</p>
 					</header>
+					<div class="container">
+						<div class="row">
+							<section class="box style1">
+								<h3>Here are some examples of expected and unexpected correlations and non-correlations:</h3>
+								<table style="width:100%" align="left" border='1'>
+								  <tr>
+								    <th colspan='2'><h4>Expected Correlation</h4></th>
+								    <th colspan='2'><h4>Expected Non-correlation</h4></th>	
+								  </tr>
+								  <tr align="left">
+								    <td><b>Keywords</b></td>
+								    <td><b>Value</b></td>	
+								    <td><b>Keywords</b></td>
+								    <td><b>Value</b></td>	
+								  </tr>
+								  <tr align="left">
+								    <td>Nelson & Mandela</td>
+								    <td>?</td>		
+								    <td>Climate & Banana</td>
+								    <td>?</td>
+								  </tr>
+								  <tr align="left">
+								    <td>MH17 & Ukraine</td>
+								    <td>?</td>		
+								    <td>WhatsApp & Jogging</td>
+								    <td>?</td>
+								  </tr>
+								  <tr align="left">
+								    <td>Refugees & Syria</td>
+								    <td>?</td>		
+								    <td>Wedding & Ukraine</td>
+								    <td>?</td>
+								  </tr>
+								</table>
+								<table style="width:100%" align="left" border='1'>
+								  <tr>	
+								    <th colspan='2'><h4>Unexpected Correlation</h4></th>
+								    <th colspan='2'><h4>Unexpected Non-correlation</h4></th>
+								  </tr>
+								  <tr align="left">
+								    <td><b>Keywords</b></td>
+								    <td><b>Value</b></td>	
+								    <td><b>Keywords</b></td>
+								    <td><b>Value</b></td>	
+								  </tr>
+								  <tr align="left">
+								    <td>MH370 & Swine</td>
+								    <td>?</td>		
+								    <td>Migrants & Refugees</td>
+								    <td>?</td>
+								  </tr>
+								  <tr align="left">
+								    <td>Linux & Allah</td>
+								    <td>?</td>		
+								    <td>Snowden & Russia</td>
+								    <td>?</td>
+								  </tr>
+								  <tr align="left">
+								    <td>Vegetarian & London</td>
+								    <td>?</td>		
+								    <td>Comet & Rosetta</td>
+								    <td>?</td>
+								  </tr>
+								</table>
+							</section>
+						</div>
+					</div>
 				</article>
 			</div>
+			
 
 			<article id="frequency_plot">
 				<header>
@@ -222,7 +290,7 @@
 				</header>
 					
 				<div class="container">
-					<div class="plotdiv" id="82bc5c3b-80a5-4060-b3c4-0991705a7cc9"></div>
+					<div class="plotdiv" id="7f786d23-563e-413a-ab53-e35116feaa13"></div>
 					<script type="text/javascript" src="frequency_plot.js"></script>
 				</div>
 			</article>
@@ -235,8 +303,21 @@
 					<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.11.1.min.js"></script>
 				</header>
 				<div class="container">
-					<div class="plotdiv" id="177f2c73-0054-453f-93cb-72ca16f00a79"></div>
-					<script type="text/javascript" src="correlations_plot.js"></script>
+					<div class="plotdiv" id="43dad00a-2ebd-4a05-9260-32cad621663c"></div>
+					<script type="text/javascript" src="correlations_raw.js"></script>
+				</div>
+			</article>
+
+			<article id="correlations_plot">
+				<header>
+					<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.11.1.min.css" type="text/css" />
+					<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.11.1.min.css" type="text/css" />
+					<script src="https://cdn.pydata.org/bokeh/release/bokeh-0.11.1.min.js"></script>
+					<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.11.1.min.js"></script>
+				</header>
+				<div class="container">
+					<div class="plotdiv" id="efe437c4-a27b-4600-9318-b1cb3ac2afd2"></div>
+					<script type="text/javascript" src="correlations_diff.js"></script>
 				</div>
 			</article>
 
