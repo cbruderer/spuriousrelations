@@ -8,6 +8,7 @@
 \usepackage{adjustbox}
 \usepackage{graphicx}
 \usepackage{footnote}
+\usepackage{color}
 \usepackage{subcaption}
 \setlength{\parindent}{0pt}% No paragraph indent
 \pagestyle{empty}% No page headers/footers
@@ -35,7 +36,7 @@
 
 \begin{abstract}
 
-One of the main goals in data analysis of any sort, is detecting and quantifying relations between quantities. With the increasing amount of data available to us, this task becomes more challenging, since large datasets are prone to spurious correlations. It is therefore important to identify these spurious correlations in order to be able to distinguish them from causal relationships. In this project search for spurious correlations by querying twitter data for a list of pre-defined keywords and computing the correlation between keyword pairs from the time series of the keyword occurrence frequencies. We compute correlations using two separate methods and find that both methods detect both expected as well as spurious correlations. These results show that for large datasets, we are easily inclined to over-interpret the results and that conventional correlation measures need to be well understood and carefully applied. 
+One of the main goals in data analysis of any sort, is detecting and quantifying relations between quantities. With the increasing amount of data available to us, this task becomes more challenging, since large datasets are prone to spurious correlations. It is therefore important to identify these spurious correlations in order to be able to distinguish them from causal relationships. In this project \textcolor{red}{we} search for spurious correlations by querying twitter data for a list of pre-defined keywords and computing the correlation between keyword pairs from the time series of the keyword occurrence frequencies. We compute correlations using two separate methods and find that both methods detect both expected as well as spurious correlations. These results show that for large datasets, we are easily inclined to over-interpret the results and that conventional correlation measures need to be well understood and carefully applied. 
 
 \noindent Our results are also available online: http://spuriousrelationships.eu.pn/
 
@@ -182,7 +183,7 @@ The above considerations assume that there is no missing time series data, which
 In order to find relations between keywords, we will proceed in two steps: for illustration purposes we will compute the cross correlation between all the time series (filled as explained above) regardless of stationarity for timelags $-10 \leq \Delta t \leq 10$. We will then compute the autocorrelation function of all the series and recompute the correlation coefficients using the differenced time series for non stationary processes. For both methods, we assign the highest correlation coefficient (regardless of timelag $\Delta t$) to each pair and compare the results obtained with these two measures. 
 
 \section{Results}
-The occurrence of different keywords over time displays different behaviour depending on the keyword. Keywords from the everyday life and family sections for example feature stationary time series with little to no variation. On the other hand, keywords associated to major events show significant trends and structure. Examples for both these cases are shown in Figures \ref{fig:timeseries_abs} and \ref{fig:timeseries_rel}.  The Figures show the absolute and relative time series for the words \textit{banana} and \textit{MH17} respectively. \textit{MH17} is the abbreviation for the Malaysian airlines flight 17, which was shot down over the Ukraine on July, 17th 2014. We see that the mentions of \textit{MH17} are concentrated in this period while the word banana appears with a constant frequency over the 6 months we have analysed. Another interesting example is the word \textit{apple}, which denotes the fruit as well as the company. We would expect the frequency of the word \textit{apple} to be fairly time-independent, but from the plot we see that the number of mentions features a strong peak in September, 2014. This is probably caused by apple holding its keynote speech during this period of the year. This example shows that many words can have different meanings depending on the context or language which can cause \textit{a priori} unexpected features in the time series. 
+The occurrence of different keywords over time displays different behaviour depending on the keyword. Keywords from the everyday life and family sections for example feature stationary time series with little to no variation. On the other hand, keywords associated to major events show significant trends and structure. Examples for both these cases are shown in Figures \ref{fig:timeseries_abs} and \ref{fig:timeseries_rel}.  \textcolor{red}{Please see Figure 5 in the results section on http://spuriousrelationships.eu.pn/ for the time series of all our keywords. Figures \ref{fig:timeseries_abs} and \ref{fig:timeseries_rel}} show the absolute and relative time series for the words \textit{banana} and \textit{MH17} respectively. \textit{MH17} is the abbreviation for the Malaysian airlines flight 17, which was shot down over the Ukraine on July, 17th 2014. We see that the mentions of \textit{MH17} are concentrated in this period while the word banana appears with a constant frequency over the 6 months we have analysed. Another interesting example is the word \textit{apple}, which denotes the fruit as well as the company. We would expect the frequency of the word \textit{apple} to be fairly time-independent, but from the plot we see that the number of mentions features a strong peak in September, 2014. This is probably caused by apple holding its keynote speech during this period of the year. This example shows that many words can have different meanings depending on the context or language which can cause \textit{a priori} unexpected features in the time series. 
 
 \begin{figure}
 \centering
@@ -234,7 +235,7 @@ The occurrence of different keywords over time displays different behaviour depe
 
 From Figures \ref{fig:timeseries_abs} and \ref{fig:timeseries_rel}, we see that in general, the time series are not stationary. We therefore transform all the time series by differencing, as outlined in Eq.~\ref{eq:diff}. The differenced time series for the keyword \textit{MH17} are shown in Fig.~\ref{fig:diff_acf} along with its autocorrelation function. We see that the differenced time series is largely stationary, even though \textit{MH17} is one of the most strongly varying keywords in our sample. This is confirmed by the autocorrelation function.
 
-The cross correlation coefficients between keyword pairs for both methods are shown in Fig. bla. As expected, we see a correlation of 1 on the diagonal, corresponding to the auto correlations. The correlation matrix has a block-diagonal form corresponding to the correlations within keyword groups, e.g. keywords within the refugees and terrorism categories. Comparing the two correlation measures, we find that the correlations computed from the differenced time series are more pronounced than the ones computed using the raw data. This is unexpected, since we would have naively expected, the latter method to generally overestimate correlations. 
+The cross correlation coefficients between keyword pairs for both methods are shown in \textcolor{red}{Figures 6 and 7 on http://spuriousrelationships.eu.pn/}. As expected, we see a correlation of 1 on the diagonal, corresponding to the auto correlations. The correlation matrix has a block-diagonal form corresponding to the correlations within keyword groups, e.g. keywords within the refugees and terrorism categories. Comparing the two correlation measures, we find that the correlations computed from the differenced time series are \textcolor{red}{less pronounced than the ones computed using the raw data. This is expected, since the latter method generally overestimates correlations.} 
 
 \begin{figure}
 \centering
@@ -252,8 +253,28 @@ The cross correlation coefficients between keyword pairs for both methods are sh
 \label{fig:diff_acf}
 \end{figure}
 
-As can be seen from the figure, we are able to retrieve expected correlations, such as correlation between \textit{nelson} and \textit{mandela} or \textit{refugees} and \textit{syria}. However, we also find several unexpected and probably spurious correlations between keywords such as \textit{MH370} and \textit{swine} or \textit{linux} and \textit{allah}. 
-This is probably both due to the simple methods employed to compute correlations as well as that computing correlations between noisy datasets without clear features is generally a difficult problem.
+As can be seen from \textcolor{red}{these figures}, we are able to retrieve expected correlations, such as correlation between \textit{nelson} and \textit{mandela} or \textit{refugees} and \textit{syria}. However, we also find several unexpected and probably spurious correlations between keywords such as \textcolor{red}{\textit{maya} and \textit{television} or \textit{mandela} and \textit{ukraine}}. 
+This is probably both due to the simple methods employed to compute correlations as well as that computing correlations between noisy datasets without clear features is generally a difficult problem. \textcolor{red}{Table \ref{tab:example_corr} shows further examples of expected and unexpected correlations and non-correlations.}
+
+\begin{minipage}{\linewidth}
+	\centering
+	\captionof{table}{Examples of expected and unexpected correlations and non-correlations}\label{tab:example_corr} 
+	\begin{tabular}{ | l | l || l | l |}
+		\hline
+		Expected Correlation &  & Expected Non-correlation & \\ \hline
+		Keywords & Value & Keywords & Value \\ \hline
+		$nelson$ \& $mandela$ & 0.793 & $climate$ \& $banana$ & 0.193\\
+		$MH17$ \& $ukraine$ & 0.713 & $whatsApp$ \& $jogging$ & -0.175\\
+		$refugees$ \& $syria$ & -0.218 & $wedding$ \& $ukraine$ & 0.685\\ \hline \hline
+		
+		Unexpected Correlation &  & Unexpected Non-correlation & \\ \hline
+		Keywords & Value & Keywords & Value \\ \hline
+		$nelson$ \& $pig$ & 0.719 & $attack$ \& $terrorism$ & -0.186\\
+		$maya$ \& $flu$ & 0.802 & $snowden$ \& $russia$ &  0.146\\
+		$isis$ \& $rosetta$ & -0.562 & $refugees$ \& $asylum$ & 0.685\\ \hline
+	\end{tabular}
+	% \par
+\end{minipage}
 
 
 \section{Conclusion}
