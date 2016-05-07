@@ -77,7 +77,7 @@
 						<div class="row">
 							<section class="box style1">
 								<p>
-								We have entered the era of Big Data and the wealth of information available to us entails its own new challenges. Relationships between quantities, whether real or without any obvious causal link, will naturally arise if the data sets are large enough (for examples see <a href="http://tylervigen.com/spurious-correlations">Tyler Vigen, Spurious correlations)</a>). Even though we might be inclined to interpret apparent links between measurements, a correlation does not imply causation. One needs to find a way to distinguish spurious relationships between measurements from those with a causal link, and quantify the frequency of chance correlations occurring.
+								We have entered the era of Big Data and the wealth of information available to us entails its own new challenges. Relationships between quantities, whether real or without any obvious causal link, will naturally arise if the data sets are large enough (for examples see <a href="http://tylervigen.com/spurious-correlations">Tyler Vigen, Spurious correlations</a>). Even though we might be inclined to interpret apparent links between measurements, a correlation does not imply causation. One needs to find a way to distinguish spurious relationships between measurements from those with a causal link, and quantify the frequency of chance correlations occurring.
 								</p>
 
 								<p>
@@ -101,12 +101,12 @@
 						<div class="row">
 							<section class="box style1">
 								<h3>Data set</h3>
-								<p>In order to identify relationships between words, we need a suitable data set containing a large amount of text data and covering an extended period of time. Data from all major social media platforms primarily using text as a medium (e.g. <a href="http://www.esa.int/Our_Activities/Space_Science/Rosetta">Twitter</a>, <a href="http://www.esa.int/Our_Activities/Space_Science/Rosetta">Facebook</a>, and Reddit \cite{reddit}) satisfy these conditions.</p>
+								<p>In order to identify relationships between words, we need a suitable data set containing a large amount of text data and covering an extended period of time. Data from all major social media platforms primarily using text as a medium (e.g. <a href="https://twitter.com/">Twitter</a>, <a href="https://www.facebook.com/">Facebook</a>, and <a href="https://www.reddit.com/">Reddit</a>) satisfy these conditions.</p>
 
 								<p>We decided to apply our analysis on Twitter data, which has been previously gathered by an ETH research group. This data set was created via the public <a href="https://dev.twitter.com/streaming/public">Twitter Stream</a>, which downloads $1\%$ of the tweets posted at that moment without applying any further filtering, and covers the years 2012-2014. We analyse a subset of the whole data set, which contains data of the months May, 2014 - July, 2014 and September, 2014 - December, 2014. These data have been converted to Parquet files, thus simplyfing reading in the data.</p>
 
 								<h3>Keyword Selection</h3>
-								<p>In our analysis we select one hundred keywords. All these keywords are listed in below:</p>
+								<p>In our analysis we select one hundred keywords. All these keywords are listed below:</p>
 								<section align="left">
 									<p><b>Terrorism / Religion:</b> isis, terrorism, arab, spring, attack, god, christian, allah, islam</p>
 									<p><b>Refugees:</b> syria, refugees, migrants, africa, italy, ethiopia, asylum, unhcr, immigration, foreigners</p>
@@ -124,9 +124,9 @@
 									<p><b>Everyday life:</b> homework, television, coffee, tea, school, work, teacher, sports, jogging, marathon</p>
 								</section>
 
-								<p>To choose these keywords, we applied different criteria. First, we identified major events that happened during the period for which we have access to twitter data (May 2014 - July 2014 and September 2014 - December 2014). For these topics, we then selected related words, on purpose also including synonyms. Besides these <i>major events categories</i> we also chose words related to long-term trends we <i>it a priori</i> expect to find in the data (e.g. <i>Food / Trends</i>, <i>Refugees</i>, <i>Politics</i>). Furthermore, we include a group of keywords on <i>Everyday life</i> for which we <i>it a priori</i> do not expect to see strong trends.</p>
+								<p>To choose these keywords, we applied different criteria. First, we identify major events that happened during the period for which we have access to twitter data (May 2014 - July 2014 and September 2014 - December 2014). For these topics, we then select related words, and deliberately also including synonyms. Besides these <i>major events categories</i> we also chose words related to long-term trends we <i>a priori</i> expect to find in the data (e.g. <i>Food / Trends</i>, <i>Refugees</i>, <i>Politics</i>). Furthermore, we include a group of keywords on <i>Everyday life</i> for which we <i>it a priori</i> do not expect to see strong trends.</p>
 
-								<p>These selection criteria were chosen to address various problems. First, by picking words related to major events localized in time (e.g.  <a href="http://www.esa.int/Our_Activities/Space_Science/Rosetta">Rosetta satellite dispatching Philae lander</a>), we are able to test our pipeline and assert that this <i>it a priori</i> expected quick rise in mentions on social media platforms is identified in our data as well. Second, by including several synonyms, it is reasonable to expect certain correlations between the keywords, hence allowing us to validate our analysis in a second, independent way. Third, the keywords for which we do not <i>it a priori</i> expect the number of mentions to display a significant structure over time (e.g. <i>Everyday life</i>), should only weakly correlate with other keywords displaying more structure.</p>
+								<p>These selection criteria are chosen to address various problems. First, by picking words related to major events localized in time (e.g.  <a href="http://www.esa.int/Our_Activities/Space_Science/Rosetta">Rosetta satellite dispatching Philae lander</a>), we are able to test our pipeline and assert that this <i> a priori</i> expected quick rise in mentions on social media platforms is identified in our data as well. Second, by including several synonyms, it is reasonable to expect certain correlations between the keywords, hence allowing us to validate our analysis in a second, independent way. Third, the keywords for which we do not <i>it a priori</i> expect the number of mentions to display a significant structure over time (e.g. <i>Everyday life</i>), should only weakly correlate with other keywords displaying more structure.</p>
 
 								<p>We note however that there are caveats in this type of analysis. Many words have different meanings and could thus potentially correlate or not correlate with other words depending on which meaning is more common. As an example, we include <i>who</i> in our analysis. While it is primarily used as a pronoun, it is also the abbreviation of the World Health Organization <a href="http://www.who.int/en/">WHO</a>. Due to the Ebola outbreak in Western Africa in 2014, we expect this secondary meaning to modulate the number of mentions over time, and potentially display correlations with related words (e.g. <i>ebola</i>). Other examples of words with multiple meanings include <i>right</i> (opposite of wrong; political perspective; direction) and <i>left</i> (past participle of leave; political perspective; direction).</p>
 
@@ -135,6 +135,11 @@
 
 								<h3>Data completeness</h3>
 								<p>The streaming of Twitter data was interrupted several times during the period the data were collected. Thus, minutes, hours, or even days are missing. While missing days are trivial to identify, doing so for partly incomplete daily data is more complicated. These days however would induce systematic biases to the analysis, as for all keywords the number of mentions decreases at the same time, thus inducing a strong correlation in otherwise potentially uncorrelated data.</p>
+
+								<p>Without access to statistics on the streaming of the data, only an empirical correction on the reduced data set is possible. We proceed in the following way, we compute the mean and the standard deviation for the number of mentions over time for each keyword. We note the indices, which correspond to individual days, in these time series for which \begin{equation}
+								\# \mathrm{Mentions} < \mathrm{Mean} - 1\cdot\mathrm{Std},
+								\end{equation}
+								and compare these indices among the keywords. We then set a threshold and consider the days incomplete, for which the number of occurences of the keyword is below the mean and standard deviation for at least 20 keywords. This process is illustrated in Figure <a href="#fig1">1</a>. </p>
 
 								<table style="width:100%" id="fig1">
 								  <tr>
@@ -145,7 +150,7 @@
 								  </tr>
 								</table>
 
-
+								<p>In order not to bias our analysis by, we remove the occurences of the keywords for these days from our analysis and treat them as days for which we do not have any tweets (see <a href="#missing_data">Missing data</a> below).
 							</section>
 						</div>
 					</div>
@@ -168,7 +173,7 @@
 								\begin{equation}
 								\rho_{ij}(\Delta t) = \langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle, \label{eq:corrcoef}
 								\end{equation} 
-								where $\langle ... \rangle$ denotes the ensemble average. For $\Delta t = 0$ we recover the usual correlation coefficient, whereas for $\Delta t \neq 0$, $\rho_{ij}(\Delta t)$ quantifies the amount of linear dependence between shifted time series. If the two time series are equal i.e. $i = j$, then we recover the autocorrelation function of the time series, which quantifies the amount of linear dependence in the time series itself. In order to compare the correlation between different time series, it is customary to normalise Eq.~\ref{eq:corrcoef} by the variance of the two time series i.e. (<a href="https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf">Marcel Dettling, Applied Time Series Analysis</a>)
+								where $\langle ... \rangle$ denotes the ensemble average. For $\Delta t = 0$ we recover the usual correlation coefficient, whereas for $\Delta t \neq 0$, $\rho_{ij}(\Delta t)$ quantifies the amount of linear dependence between shifted time series. If the two time series are equal i.e. $i = j$, then we recover the autocorrelation function of the time series, which quantifies the amount of linear dependence in the time series itself. In order to compare the correlation between different time series, it is customary to normalise Eq. \ref{eq:corrcoef} by the variance of the two time series i.e. (<a href="https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf">Marcel Dettling, Applied Time Series Analysis</a>)
 								\begin{equation}
 								\rho_{ij}(\Delta t) = \frac{\langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{j, t}-\bar{X}_{j}) (X_{j, t}-\bar{X}_{j}) \rangle}}. \label{eq:corrcoef1}
 								\end{equation}
@@ -213,7 +218,7 @@
 								In order to quantify the significance of both the auto- and cross correlations, we need to compare the measured values to the expected values for uncorrelated time series. For uncorrelated time series, which are a sequence of IID variables we expect both for the auto and cross correlations $\rho(\Delta t) = 0$ with a variance of $\sigma^{2}(\rho(\Delta t)) = \frac{1}{n}$, where $n$ denotes the number of samples used to estimate the correlation (<a href="https://stat.ethz.ch/education/semesters/ss2014/atsa/Scriptum_v140523.pdf">Marcel Dettling, Applied Time Series Analysis</a>). For simplicity, we will call a cross-correlation between two time series significant if its value exceeds $1.96 \sigma(\rho(\Delta t))$ (i.e. the $95 \%$ confidence limits), even though we do not expect the differenced time series to be perfect IID processes. 
 								</p>
 
-								<h3>Missing data</h3>
+								<h3 id='missing_data'>Missing data</h3>
 								<p>
 								The above considerations assume that there is no missing time series data, which is rarely the case in reality. Several pieces of data are missing in the twitter dataset. First of all we do not have access to data for most of August 2014 and furthermore there are several days missing thoughout. In order to be able to analyse the data, we therefore fill the missing values using random samples drawn from a normal distribution with the mean and variance of the respective time series. This procedure will keep mean and standard deviation constant and will not introduce any correlations between different time series.
 								</p>
@@ -309,21 +314,21 @@
 									    <td><b>Value</b></td>	
 									  </tr>
 									  <tr align="left">
-									    <td>Nelson & Mandela</td>
+									    <td><i>nelson</i> & <i>mandela</i></td>
 									    <td>0.793</td>		
-									    <td>Climate & Banana</td>
+									    <td><i>climate</i> & <i>banana</i></td>
 									    <td>0.193</td>
 									  </tr>
 									  <tr align="left">
-									    <td>MH17 & Ukraine</td>
+									    <td><i>MH17</i> & <i>ukraine</i></td>
 									    <td>0.713</td>		
-									    <td>WhatsApp & Jogging</td>
+									    <td><i>WhatsApp</i> & <i>Jogging</i></td>
 									    <td>-0.175</td>
 									  </tr>
 									  <tr align="left">
-									    <td>Refugees & Syria</td>
+									    <td><i>refugees</i> & <i>syria</i></td>
 									    <td>-0.218</td>		
-									    <td>Wedding & Ukraine</td>
+									    <td><i>wedding</i> & <i>ukraine</i></td>
 									    <td>0.658</td>
 									  </tr>
 									</table>
@@ -339,21 +344,21 @@
 									    <td><b>Value</b></td>	
 									  </tr>
 									  <tr align="left">
-									    <td>Nelson & Pig</td>
+									    <td><i>nelson</i> & <i>pig</i></td>
 									    <td>0.719</td>		
-									    <td>Attack & Terrorism</td>
+									    <td><i>attack</i> & <i>terrorism</i></td>
 									    <td>-0.186</td>
 									  </tr>
 									  <tr align="left">
-									    <td>Maya & Flu</td>
+									    <td><i>maya</i> & <i>flu</i></td>
 									    <td>0.802</td>		
-									    <td>Snowden & Russia</td>
+									    <td><i>snowden</i> & <i>russia</i></td>
 									    <td>0.146</td>
 									  </tr>
 									  <tr align="left">
-									    <td>Isis & Rosetta</td>
+									    <td><i>isis</i> & <i>rosetta</i></td>
 									    <td>-0.562</td>		
-									    <td>Refugees & Asylum</td>
+									    <td><i>refugees</i> & <i>asylum</i></td>
 									    <td>-0.291</td>
 									  </tr>
 									</table>
@@ -461,7 +466,8 @@
 						    	<p>@cbruderer</p>
 						    </td>
 						    <td>
-						    	<li><a href="" class="icon fa-twitter"><span class="label">Twitter</span></a></li>...<p></p>
+						    	<li><a href="https://twitter.com/aaxnicola" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+						    	<p>@aaxnicola</p>
 						    </td> 
 						    <td>
 						    	<li><a href="https://twitter.com/AnnaKWeigel" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
