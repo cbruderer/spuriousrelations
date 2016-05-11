@@ -8,6 +8,7 @@
 \usepackage{adjustbox}
 \usepackage{graphicx}
 \usepackage{footnote}
+\usepackage{color}
 \usepackage{subcaption}
 \setlength{\parindent}{0pt}% No paragraph indent
 \pagestyle{empty}% No page headers/footers
@@ -35,7 +36,7 @@
 
 \begin{abstract}
 
-One of the main goals in data analysis of any sort, is detecting and quantifying relations between quantities. With the increasing amount of data available to us, this task becomes more challenging, since large datasets are prone to spurious correlations. It is therefore important to identify these spurious correlations in order to be able to distinguish them from causal relationships. In this project search for spurious correlations by querying twitter data for a list of pre-defined keywords and computing the correlation between keyword pairs from the time series of the keyword occurrence frequencies. We compute correlations using two separate methods and find that both methods detect both expected as well as spurious correlations. These results show that for large datasets, we are easily inclined to over-interpret the results and that conventional correlation measures need to be well understood and carefully applied. 
+One of the main goals in data analysis of any sort, is detecting and quantifying relations between quantities. With the increasing amount of data available to us, this task becomes more challenging, since large datasets are prone to spurious correlations. It is therefore important to identify these spurious correlations in order to be able to distinguish them from causal relationships. In this project we search for spurious correlations by querying twitter data for a list of pre-defined keywords and computing the correlation between keyword pairs from the time series of the keyword occurrence frequencies. We compute correlations using two separate methods and find that both methods detect expected as well as spurious correlations. These results show that for large datasets, we are easily inclined to over-interpret the results and that conventional correlation measures need to be well understood and carefully applied. 
 
 \noindent Our results are also available online: http://spuriousrelationships.eu.pn/
 
@@ -53,10 +54,10 @@ Based on a list of pre-defined keywords and Twitter data, we aim to show that re
 We use a Twitter dataset which contains unfiltered tweets between May 2014 - July 2014 and September 2014 - December 2014. For each day, we determine the number of tweets containing one of our pre-defined keywords. We then measure and quantify the time-correlation functions between the popularity of various keywords. To test our method we recover and quantify expected correlations between synonyms or related keywords. We  additionally investigate and discuss the performance of different correlation measures.
 
 \section{Data}
-\subsection{Data set}
+\subsection{Data set}\label{sec:data}
 In order to identify relationships between words, we need a suitable data set containing a large amount of text data and covering an extended period of time. Data from all major social media platforms primarily using text as a medium (e.g. Twitter \cite{twitter}, Facebook \cite{facebook}, and Reddit \cite{reddit}) satisfy these conditions.
 
-We decided to apply our analysis on Twitter data, which has been previously gathered by an ETH research group. This data set was created via the public Twitter stream \cite{twitterstream}, which downloads 1\% of the tweets posted at that moment without applying any further filtering, and covers the years 2012-2014. We analyse a subset of the whole data set, which contains data of the months May, 2014 - July, 2014 and September, 2014 - December, 2014. These data have been converted to Parquet files, thus simplyfing reading in the data.
+We decided to apply our analysis on Twitter data, which has been previously gathered by an ETH research group. This data set was created via the public Twitter stream \cite{twitterstream}, which downloads 1\% of the tweets posted at that moment without applying any further filtering, and covers the years 2012-2014. We analyse a subset of the whole data set, which contains data of the months May, 2014 - July, 2014 and September, 2014 - December, 2014. These data have been converted to Parquet files, thus simplyfying reading in the data.
 
 \subsection{Keyword selection}
 
@@ -134,14 +135,14 @@ In order not to bias our analysis by, we remove the occurences of the keywords f
 All our analysis codes can be found on this public \textsc{GitHub} repository \cite{github}.
 
 \section{Time series analysis}
-The main results of the data reduction explained in the previous section, are time series of the occurrence of each of the 100 keywords in the queried twitter dataset. In order to identify relationships between different keywords, we compare their occurrence frequencies using three different methods based on the Pearson correlation coefficient and k means clustering. 
+The main results of the data reduction explained in the previous section, are time series of the occurrence of each of the 100 keywords in the queried twitter dataset. In order to identify relationships between different keywords, we compare their occurrence frequencies using two different methods based on the Pearson correlation coefficient. 
 
 \subsection{Correlation between stationary time series}
 We can determine the amount of linear dependence between two time series $X_{i}$ and $X_{j}$ using the correlation coefficient $\rho$. The correlation $\rho(\Delta t)$ between two time series is a function of the time lag $\Delta t$ between the two and is defined as \cite{dettling14}
 \begin{equation}
 \rho_{ij}(\Delta t) = \langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle, \label{eq:corrcoef}
 \end{equation} 
-where $\langle ... \rangle$ denotes the ensemble average. For $\Delta t = 0$ we recover the usual correlation coefficient, whereas for $\Delta t \neq 0$, $\rho_{ij}(\Delta t)$ quantifies the amount of linear dependence between shifted time series. If the two time series are equal i.e. $i = j$, then we recover the autocorrelation function of the time series, which quantifies the amount of linear dependence in the time series itself. In order to compare the correlation between different time series, it is customary to normalise Eq.~\ref{eq:corrcoef} by the variance of the two time series i.e. \cite{dettling14}
+where $\langle ... \rangle$ denotes the ensemble average. For $\Delta t = 0$ we recover the usual correlation coefficient, whereas for $\Delta t \neq 0$, $\rho_{ij}(\Delta t)$ quantifies the amount of linear dependence between shifted time series. If the two time series are equal i.e. $i = j$, we recover the autocorrelation function of the time series, which quantifies the amount of linear dependence in the time series itself. In order to compare the correlation between different time series, it is customary to normalise Eq.~\ref{eq:corrcoef} by the variance of the two time series i.e. \cite{dettling14}
 \begin{equation}
 \rho_{ij}(\Delta t) = \frac{\langle (X_{i, t}-\bar{X}_{i}) (X_{j, t+\Delta t}-\bar{X}_{j}) \rangle}{\sqrt{\langle (X_{i, t}-\bar{X}_{i}) (X_{i, t}-\bar{X}_{i}) \rangle \langle (X_{j, t}-\bar{X}_{j}) (X_{j, t}-\bar{X}_{j}) \rangle}}. \label{eq:corrcoef1}
 \end{equation} 
@@ -161,7 +162,7 @@ Only in this case, can we replace the ensemble averages in Equations \ref{eq:cor
 \subsection{Differencing of non-stationary time series}
 We do not expect the occurrences of keywords in twitter data to be stationary time series, since the mean occurrence of any keyword will for example depend on world events, its popularity and also on the number of people using twitter. We can roughly assess if any time series is stationary by visually inspecting the time series plot and also by computing its autocorrelation function $\rho(\Delta t)$. Non stationary time series are generally characterised by clear patterns in the autocorrelation functions because consecutive values are strongly correlated through the common trend.
 
-In order to be able to quantify the correlation between non stationary time series we need to make the series stationary prior to evaluating Equations \ref{eq:corrcoef} and \ref{eq:corrcoef1}. The most basic form is called differencing, which allows us to transform time series with a slow trend to stationary series. A time series with a trend can be written as \cite{dettling14}
+In order to be able to quantify the correlation between non stationary time series we need to make the series stationary prior to evaluating Equations \ref{eq:corrcoef} and \ref{eq:corrcoef1}. The most basic form is called differencing, which allows us to transform time series with a slow trend to a stationary series. A time series with a trend can be written as \cite{dettling14}
 \begin{equation}
 X_{i, t} = T_{i, t} + R_{i, t},
 \end{equation} 
@@ -177,12 +178,12 @@ For non stationary time series, we can thus first perform differencing and then 
 In order to quantify the significance of both the auto- and cross correlations, we need to compare the measured values to the expected values for uncorrelated time series. For uncorrelated time series, which are a sequence of IID variables we expect both for the auto and cross correlations $\rho(\Delta t) = 0$ with a variance of $\sigma^{2}(\rho(\Delta t)) = \frac{1}{n}$, where $n$ denotes the number of samples used to estimate the correlation \cite{dettling14}. For simplicity, we will call a cross-correlation between two time series significant if its value exceeds $1.96 \sigma(\rho(\Delta t))$ (i.e. the $95 \%$ confidence limits), even though we do not expect the differenced time series to be perfect IID processes. 
 
 \subsection{Missing data}\label{sec:missingdata}
-The above considerations assume that there is no missing time series data, which is rarely the case in reality. Several pieces of data are missing in the twitter dataset. First of all we do not have access to data for most of August 2014 and furthermore there are several days missing thoughout. In order to be able to analyse the data, we therefore fill the missing values using random samples drawn from a normal distribution with the mean and variance of the respective time series. This procedure will keep mean and standard deviation constant and will not introduce any correlations between different time series.
+The above considerations assume that there is no missing time series data, which is rarely the case in reality. Several pieces of data are missing in the twitter dataset. First of all we do not have access to data for most of August 2014 and furthermore there are several days missing throughout. In order to be able to analyse the data, we therefore fill the missing values using random samples drawn from a normal distribution with the mean and variance of the respective time series. This procedure will keep mean and standard deviation constant and will not introduce any correlations between different time series.
 
 In order to find relations between keywords, we will proceed in two steps: for illustration purposes we will compute the cross correlation between all the time series (filled as explained above) regardless of stationarity for timelags $-10 \leq \Delta t \leq 10$. We will then compute the autocorrelation function of all the series and recompute the correlation coefficients using the differenced time series for non stationary processes. For both methods, we assign the highest correlation coefficient (regardless of timelag $\Delta t$) to each pair and compare the results obtained with these two measures. 
 
 \section{Results}
-The occurrence of different keywords over time displays different behaviour depending on the keyword. Keywords from the everyday life and family sections for example feature stationary time series with little to no variation. On the other hand, keywords associated to major events show significant trends and structure. Examples for both these cases are shown in Figures \ref{fig:timeseries_abs} and \ref{fig:timeseries_rel}.  The Figures show the absolute and relative time series for the words \textit{banana} and \textit{MH17} respectively. \textit{MH17} is the abbreviation for the Malaysian airlines flight 17, which was shot down over the Ukraine on July, 17th 2014. We see that the mentions of \textit{MH17} are concentrated in this period while the word banana appears with a constant frequency over the 6 months we have analysed. Another interesting example is the word \textit{apple}, which denotes the fruit as well as the company. We would expect the frequency of the word \textit{apple} to be fairly time-independent, but from the plot we see that the number of mentions features a strong peak in September, 2014. This is probably caused by apple holding its keynote speech during this period of the year. This example shows that many words can have different meanings depending on the context or language which can cause \textit{a priori} unexpected features in the time series. 
+The occurrence of different keywords over time displays different behaviour depending on the keyword. Keywords from the everyday life and family sections for example feature stationary time series with little to no variation. On the other hand, keywords associated to major events show significant trends and structure. Examples for both these cases are shown in Figures \ref{fig:timeseries_abs} and \ref{fig:timeseries_rel}. Please see Figure 5 in the results section on http://spuriousrelationships.eu.pn/ for the time series of all our keywords. Figures \ref{fig:timeseries_abs} and \ref{fig:timeseries_rel} show the absolute and relative time series for the words \textit{banana} and \textit{MH17} respectively. \textit{MH17} is the abbreviation for the Malaysian airlines flight 17, which was shot down over the Ukraine on July, 17th 2014. We see that the mentions of \textit{MH17} are concentrated in this period while the word banana appears with a constant frequency over the 6 months we have analysed. The time series for the word \textit{apple} is an example for the occurrence frequency of words with different meanings as detailed in Section \ref{sec:data}. The word \textit{apple} refers to both the fruit as well as the company. We would expect the frequency of the fruit to be fairly time-independent, but from Figures \ref{fig:timeseries_abs} and \ref{fig:timeseries_rel}, we see that the number of mentions features a strong peak in September, 2014. This is probably caused by apple holding its keynote speech on September 9th, 2014, showing that different word usages can dominate the occurrence frequency at different times.
 
 \begin{figure}
 \centering
@@ -232,9 +233,9 @@ The occurrence of different keywords over time displays different behaviour depe
 \label{fig:timeseries_rel}
 \end{figure}
 
-From Figures \ref{fig:timeseries_abs} and \ref{fig:timeseries_rel}, we see that in general, the time series are not stationary. We therefore transform all the time series by differencing, as outlined in Eq.~\ref{eq:diff}. The differenced time series for the keyword \textit{MH17} are shown in Fig.~\ref{fig:diff_acf} along with its autocorrelation function. We see that the differenced time series is largely stationary, even though \textit{MH17} is one of the most strongly varying keywords in our sample. This is confirmed by the autocorrelation function.
+From Figures \ref{fig:timeseries_abs} and \ref{fig:timeseries_rel}, we see that in general, the time series are not stationary. We therefore transform all the time series by differencing, as outlined in Eq.~\ref{eq:diff}. The differenced time series for the keyword \textit{MH17} are shown in Fig.~\ref{fig:diff_acf} along with its autocorrelation function. We see that the differenced time series is significantly more stationary, even though \textit{MH17} is one of the most strongly varying keywords in our sample. This is confirmed by the autocorrelation function.
 
-The cross correlation coefficients between keyword pairs for both methods are shown in Fig. bla. As expected, we see a correlation of 1 on the diagonal, corresponding to the auto correlations. The correlation matrix has a block-diagonal form corresponding to the correlations within keyword groups, e.g. keywords within the refugees and terrorism categories. Comparing the two correlation measures, we find that the correlations computed from the differenced time series are more pronounced than the ones computed using the raw data. This is unexpected, since we would have naively expected, the latter method to generally overestimate correlations. 
+The cross correlation coefficients between keyword pairs for both methods are shown in Figures 6 and 7 on http://spuriousrelationships.eu.pn/. As expected, we see a correlation of 1 on the diagonal, corresponding to the normalised auto correlations. The correlation matrix has a block-diagonal form corresponding to the correlations within keyword groups, e.g. keywords within the refugees and terrorism categories. Comparing the two correlation measures, we find that the correlations computed from the differenced time series are less pronounced than the ones computed using the raw data. This is expected, since the latter method generally overestimates correlations. 
 
 \begin{figure}
 \centering
@@ -252,14 +253,34 @@ The cross correlation coefficients between keyword pairs for both methods are sh
 \label{fig:diff_acf}
 \end{figure}
 
-As can be seen from the figure, we are able to retrieve expected correlations, such as correlation between \textit{nelson} and \textit{mandela} or \textit{refugees} and \textit{syria}. However, we also find several unexpected and probably spurious correlations between keywords such as \textit{MH370} and \textit{swine} or \textit{linux} and \textit{allah}. 
-This is probably both due to the simple methods employed to compute correlations as well as that computing correlations between noisy datasets without clear features is generally a difficult problem.
+As can be seen from these figures, we are able to retrieve expected correlations, such as correlation between \textit{nelson} and \textit{mandela} or \textit{refugees} and \textit{syria}. However, we also find several unexpected and probably spurious correlations between keywords such as \textit{maya} and \textit{television} or \textit{mandela} and \textit{ukraine}. 
+This is probably both due to the simple methods employed to compute correlations as well as that computing correlations between noisy datasets without clear features is generally a difficult problem. Table \ref{tab:example_corr} shows further examples of expected and unexpected correlations and non-correlations.
+
+\begin{minipage}{\linewidth}
+	\centering
+	\captionof{table}{Examples of expected and unexpected correlations and non-correlations}\label{tab:example_corr} 
+	\begin{tabular}{ | l | l || l | l |}
+		\hline
+		Expected Correlation &  & Expected Non-correlation & \\ \hline
+		Keywords & Value & Keywords & Value \\ \hline
+		$nelson$ \& $mandela$ & 0.793 & $climate$ \& $banana$ & 0.193\\
+		$MH17$ \& $ukraine$ & 0.713 & $whatsApp$ \& $jogging$ & -0.175\\
+		$refugees$ \& $syria$ & -0.218 & $wedding$ \& $ukraine$ & 0.685\\ \hline \hline
+		
+		Unexpected Correlation &  & Unexpected Non-correlation & \\ \hline
+		Keywords & Value & Keywords & Value \\ \hline
+		$nelson$ \& $pig$ & 0.719 & $attack$ \& $terrorism$ & -0.186\\
+		$maya$ \& $flu$ & 0.802 & $snowden$ \& $russia$ &  0.146\\
+		$isis$ \& $rosetta$ & -0.562 & $refugees$ \& $asylum$ & 0.685\\ \hline
+	\end{tabular}
+	% \par
+\end{minipage}
 
 
 \section{Conclusion}
 In this project we analysed roughly six months of unfiltered twitter data by querying the tweets for a set of 100 predefined keywords. We aimed at recovering correlations between the occurrence frequencies of related keywords and showing that spurious relationships can be detected in large datasets. We used both the time series of the number of tweets per day containing a particular keyword and its differenced counterpart to compute correlation coefficients for pairs of keywords. 
 
-While we found large correlation coefficients for \textit{a priori} expected keyword pairs, we also measured a significant number of unexpected and probably spurious correlations.
+While we found large correlation coefficients for \textit{a priori} expected keyword pairs, we also measured a significant number of unexpected and probably spurious correlations. This shows that large data sets need to be carefully analysed and that the increasing volume of data sets asks for exploration of novel analysis methods.
 
 
 \section{Acknowledgements}
